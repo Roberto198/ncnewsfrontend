@@ -2,25 +2,70 @@ import React from 'react';
 import Header from './components/Header';
 import Article from './components/Article';
 import Profile from './components/Profile';
-import './css/index.css';
-import { Router } from '@reach/router';
 import ArticleList from './components/ArticleList';
+import Topics from './components/Topics';
+import TopicPage from './components/TopicPage.jsx';
+import './css/index.css';
+import { Router, navigate } from '@reach/router';
+import { axiosGetUser } from './api/axios';
 
 class App extends React.Component {
 	state = {
-		username: 'tickle122',
+		loggedInUser: null,
+		searchTerm: '',
 	};
+
+	componentDidUpdate(prevState) {
+		if (this.state.loggedInUser !== prevState.loggedInUser) {
+			this.render();
+		}
+	}
+
+	componentDidMount() {}
+
 	render() {
+		let { loggedInUser, searchTerm, articles } = this.state;
 		return (
 			<div className="App">
-				<Header path="/*" username={this.state.username} />
 				<Router>
-					<ArticleList path="/" />
-					<Article path="/article/:id" />
+					<Header
+						path="/*"
+						loggedInUser={loggedInUser}
+						logOut={this.logOut}
+						basicSearch={this.basicSearch}
+						setUsername={this.setUsername}
+					/>
+				</Router>
+				<Router>
+					<Profile path="/users/:id" loggedInUser={loggedInUser} />
+					<Topics path="/topics" loggedInUser={loggedInUser} />
+					<TopicPage path="/topics/:id" loggedInUser={loggedInUser} />
+					<ArticleList
+						path="/*"
+						searchTerm={searchTerm}
+						articles={articles}
+						basicSearch={this.basicSearch}
+						loggedInUser={this.state.loggedInUser}
+					/>
+					<Article path="/article/:id" loggedInUser={loggedInUser} />
 				</Router>
 			</div>
 		);
 	}
+
+	basicSearch = (searchTerm, paramObj = {}) => {
+		this.setState({ searchTerm: searchTerm }, () => {
+			navigate('/');
+		});
+	};
+
+	setUsername = username => {
+		axiosGetUser(username).then(({ data }) => this.setState({ loggedInUser: data[0] }));
+	};
+
+	logOut = () => {
+		this.setState({ searchTerm: '', loggedInUser: null });
+	};
 }
 
 export default App;

@@ -1,7 +1,7 @@
 import React from 'react';
 import Axios from 'axios';
 
-class CommentsById extends React.Component {
+class Comments extends React.Component {
 	state = {
 		comments: [],
 		comment_count: 0,
@@ -33,4 +33,4 @@ class CommentsById extends React.Component {
 	}
 }
 
-export default CommentsById;
+export default Comments;

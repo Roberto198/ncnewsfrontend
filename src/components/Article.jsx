@@ -1,6 +1,6 @@
 import React from 'react';
 import Axios from 'axios';
-import CommentsById from './CommentsById';
+import Comments from './Comments';
 
 class Article extends React.Component {
 	state = {
@@ -29,7 +29,7 @@ class Article extends React.Component {
 						<span>{vote}</span>
 					</nav>
 				</div>
-				<CommentsById article={this.props.id} />
+				<Comments article={this.props.id} />
 			</div>
 		);
 	}

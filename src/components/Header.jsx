@@ -1,41 +1,86 @@
 import React from 'react';
 import '../css/index.css';
-import Axios from 'axios';
+import { Link } from '@reach/router';
 
 class Header extends React.Component {
 	state = {
-		userProfile: {},
+		search: '',
+		usernameInput: null,
 	};
-	componentDidMount() {
-		const url = `https://northcodersapinews.herokuapp.com/api/users/${this.props.username}`;
-		Axios.get(url).then(({ data }) => {
-			this.setState({ userProfile: data[0] });
-		});
-	}
+
+	// componentDidUpdate(prevState){
+	// 	if(this.state.search !== prevState.search)
+
+	// }
 
 	render() {
 		return (
 			<div className="wrapper">
 				<div className="header">
-					<div className="profileHeader">
-						<h3>{this.props.username}</h3>
-					</div>
 					<div className="mainHeader">
-						<h1>NCNews</h1>
-						<hr />
-						<span>
-							Search: <input type="text" onChange={this.updateSearch} />
-							<button type="submit">Submit</button>
-							<span className="links">TOP -- NEWEST -- MOST COMMENTED </span>
+						{this.props.loggedInUser === null ? (
+							<span className="loginControl">
+								Login : <input type="text" onChange={this.handleInput} defaultValue="E.g.: jessjelly" />
+								<button type="submit" onClick={this.submitUsername}>
+									Go!
+								</button>
+							</span>
+						) : (
+							<span className="loginControl">
+								<Link to={`/users/${this.props.loggedInUser.username}`}>Profile.</Link>
+								<Link to="/" onClick={this.logOut}>
+									Logout.
+								</Link>
+							</span>
+						)}
+						<span>NCNews</span> <hr />{' '}
+						<span className="searchBox">
+							<input type="text" onChange={this.updateSearch} value={this.state.search} />
+
+							<button type="submit" onClick={this.submitSearch}>
+								Submit
+							</button>
+
+							<button onClick={this.exitSearch}>Reset</button>
 						</span>
+						<Link to="/topics">
+							<button>topics</button>
+						</Link>
+						<Link to="/">
+							<button>Home</button>
+						</Link>
 					</div>
 				</div>
 			</div>
 		);
 	}
-	updateSearch() {
-		console.log(this.target.value);
-	}
+	updateSearch = e => {
+		this.setState({ search: e.target.value });
+	};
+
+	submitSearch = e => {
+		e.preventDefault();
+		this.props.basicSearch(this.state.search);
+		this.setState({ search: '' });
+	};
+	exitSearch = () => {
+		this.props.basicSearch('');
+		this.setState({ search: '' });
+	};
+
+	handleInput = e => {
+		this.setState({ usernameInput: e.target.value });
+	};
+
+	submitUsername = e => {
+		e.preventDefault();
+		this.props.setUsername(this.state.usernameInput);
+		this.setState({});
+	};
+
+	logOut = e => {
+		this.props.logOut();
+	};
 }
 
 export default Header;

@@ -10,15 +10,20 @@
 	height: 15vh;
 	margin: 0;
 	width: 100%;
-	display: flex;
+	display: inline-block;
 }
 .mainHeader {
-	width: 80%;
+	width: 90%;
 	display: inline-block;
 }
-.profileHeader {
-	width: 20%;
+.header .links {
 	display: inline-block;
+}
+.searchBox {
+	padding-right: 2vw;
+}
+.loginControl {
+	float: left;
 }
 
 /* body*/
@@ -26,10 +31,6 @@
 	display: flex-box;
 	align-content: center;
 	margin: 15px;
-}
-
-.links {
-	margin-left: 40px;
 }
 
 .listedArticle {
