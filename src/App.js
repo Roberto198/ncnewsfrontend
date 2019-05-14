@@ -13,10 +13,11 @@ class App extends React.Component {
 	state = {
 		loggedInUser: null,
 		searchTerm: '',
+		articles: [],
 	};
 
 	componentDidUpdate(prevState) {
-		if (this.state.loggedInUser !== prevState.loggedInUser) {
+		if (this.state !== this.prevState) {
 			this.render();
 		}
 	}

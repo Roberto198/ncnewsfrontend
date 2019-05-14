@@ -15,9 +15,16 @@ class ArticleList extends React.Component {
 					this.setState({ articles, searchTerm: this.props.searchTerm });
 				});
 			}
-			if (this.props !== prevProps) {
-				console.log(this.props, '<-props from update');
-				this.setState({ loggedInUser: this.props.loggedInUser });
+			if (this.props.searchTerm !== prevProps.searchTerm) {
+				axiosArticlesRequest({ params: this.props.query }, this.props.searchTerm).then(
+					({ data: { articles } }) => {
+						this.setState({
+							articles,
+							searchTerm: this.props.searchTerm,
+							loggedInUser: this.props.loggedInUser,
+						});
+					}
+				);
 			}
 			//  else {
 			// 	axiosArticlesRequest({ params: this.props.query }, this.props.searchTerm).then(
