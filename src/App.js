@@ -13,19 +13,22 @@ class App extends React.Component {
 	state = {
 		loggedInUser: null,
 		searchTerm: '',
-		articles: [],
 	};
 
 	componentDidUpdate(prevState) {
-		if (this.state !== this.prevState) {
+		if (this.state.loggedInUser !== prevState.loggedInUser) {
 			this.render();
 		}
 	}
 
-	componentDidMount() {}
+	componentDidMount() {
+		console.log(localStorage.getItem('user'), '<-local storgae');
+	}
 
 	render() {
 		let { loggedInUser, searchTerm, articles } = this.state;
+
+		// console.dir(localStorage.getItem('user'));
 		return (
 			<div className="App">
 				<Router>
@@ -44,9 +47,8 @@ class App extends React.Component {
 					<ArticleList
 						path="/*"
 						searchTerm={searchTerm}
-						articles={articles}
 						basicSearch={this.basicSearch}
-						loggedInUser={this.state.loggedInUser}
+						loggedInUser={loggedInUser}
 					/>
 					<Article path="/article/:id" loggedInUser={loggedInUser} />
 				</Router>
@@ -61,7 +63,11 @@ class App extends React.Component {
 	};
 
 	setUsername = username => {
-		axiosGetUser(username).then(({ data }) => this.setState({ loggedInUser: data[0] }));
+		axiosGetUser(username).then(({ data: user }) =>
+			this.setState({ loggedInUser: user[0] }, () => {
+				localStorage.setItem('user', user);
+			})
+		);
 	};
 
 	logOut = () => {

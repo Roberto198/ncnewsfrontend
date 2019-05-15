@@ -24,7 +24,6 @@ class TopicPage extends React.Component {
 		return (
 			<div>
 				<h2>Articles under the topic '{this.props.id}':</h2>
-				<h2>article list component below:</h2>
 				<ArticleList query={{ topic: this.props.id }} loggedInUser={this.state.loggedInUser} />
 			</div>
 		);

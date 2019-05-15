@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from '@reach/router';
 import { axiosArticlesRequest, axiosGetAllArticles } from '../api/axios';
+import Article from './Article';
+import ArticleCard from './ArticleCard';
 
 class ArticleList extends React.Component {
 	state = {
@@ -9,11 +11,21 @@ class ArticleList extends React.Component {
 	};
 
 	componentDidUpdate(prevProps, prevState) {
+		if (prevState.loggedInUser !== this.props.loggedInUser) {
+			this.setState({ loggedInUser: this.props.loggedInUser });
+		}
+		// if (this.props.id !== prevProps.id) {
+		// 	this.setState({ displayedUser: this.props.id });
+		// }
+
 		if (this.props.searchTerm !== prevState.searchTerm) {
 			if (!this.props.searchTerm) {
 				axiosGetAllArticles({ params: this.props.query }).then(({ data: { articles } }) => {
 					this.setState({ articles, searchTerm: this.props.searchTerm });
 				});
+			}
+			if (this.props.id != this.state.displayedUser) {
+				this.setState({ displayedUser: this.props.id });
 			}
 			if (this.props.searchTerm !== prevProps.searchTerm) {
 				axiosArticlesRequest({ params: this.props.query }, this.props.searchTerm).then(
@@ -26,24 +38,19 @@ class ArticleList extends React.Component {
 					}
 				);
 			}
-			//  else {
-			// 	axiosArticlesRequest({ params: this.props.query }, this.props.searchTerm).then(
-			// 		({ data: { articles } }) => {
-			// 			this.setState({ articles, searchTerm: this.props.searchTerm });
-			// 		}
-			// 	);
-			// }
 		}
 	}
 
 	componentDidMount() {
-		axiosGetAllArticles({ params: this.props.query }).then(({ data: { articles } }) => {
+		axiosArticlesRequest(this.props.query, this.props.searchTerm).then(({ data: { articles } }) => {
+			console.log(this.props.query, 'at did mount');
+
 			this.setState({ articles, searchTerm: this.props.searchTerm, loggedInUser: this.props.loggedInUser });
 		});
 	}
 
 	render() {
-		let { articles } = this.state;
+		let { articles, loggedInUser } = this.state;
 		return (
 			<div>
 				<div className="sortButtons">
@@ -69,23 +76,13 @@ class ArticleList extends React.Component {
 						MOST COMMENTS
 					</button>
 				</div>
-				{this.props.searchTerm !== '' ? <h3>Search :'{this.props.searchTerm}'</h3> : null}
+				{this.props.searchTerm && this.props.searchTerm.length > 1 ? (
+					<h3>Search :'{this.props.searchTerm}'</h3>
+				) : null}
+
 				{articles.length > 1 ? (
 					articles.map(article => {
-						return (
-							// <ArticleTagLine />
-							<div className="listedArticle" key={article.article_id}>
-								{this.state.loggedInUser && <h2>loggedIn!</h2>}
-								<Link to={`/article/${article.article_id}`}>
-									<h3>{article.title}</h3>
-								</Link>
-
-								<p>
-									<Link to={`/users/${article.author}`}>{article.author}</Link> -{article.created_at}{' '}
-									- <Link to={`/topics/${article.topic}`}>{article.topic}</Link>
-								</p>
-							</div>
-						);
+						return <ArticleCard article={article} loggedInUser={loggedInUser} />;
 					})
 				) : (
 					<h1>Loading...</h1>

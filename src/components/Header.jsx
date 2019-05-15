@@ -75,7 +75,6 @@ class Header extends React.Component {
 	submitUsername = e => {
 		e.preventDefault();
 		this.props.setUsername(this.state.usernameInput);
-		this.setState({});
 	};
 
 	logOut = e => {

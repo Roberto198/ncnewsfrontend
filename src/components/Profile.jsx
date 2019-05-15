@@ -1,48 +1,40 @@
 import React from 'react';
 import ArticleList from './ArticleList';
+import { axiosGetUser } from '../api/axios';
 
 class Profile extends React.Component {
 	state = {
-		displayedUser: [],
+		displayedUser: null,
 		loadedUser: false,
 		loadedArticle: false,
 		articles: [],
 	};
 
 	// componentDidUpdate(prevState) {
-	// 	if (prevState.loadedUser !== this.state.loadedUser) {
+	// 	if (this.state.displayedUser != prevProps.) {
 	// 		this.setState({ displayedUser: this.props.id });
 	// 	}
 	// }
 
-	// componentDidMount() {
-	// 	console.log(this.props);
-	// 	let { articles } = this.props;
-	// 	axiosGetRequest({}, `/users/${this.props.id}`).then(user => {
-	// 		this.setState({
-	// 			articles: articles,
-	// 			displayedUser: user.data[0],
-	// 			loadedArticle: true,
-	// 			loadedUser: 'true',
-	// 		});
-	// 	});
-	// }
+	componentDidMount() {
+		axiosGetUser(this.props.id).then(({ data }) => {
+			this.setState({ displayedUser: data[0], loggedInUser: this.props.loggedInUser });
+		});
+	}
 
 	render() {
-		return this.state.loaded === false ? (
-			<h1>Loading...</h1>
-		) : (
+		let { loggedInUser } = this.props;
+		return this.state.displayedUser ? (
 			<div>
 				<h1>{this.props.id}</h1>
-				<div className="">
-					<img src={this.state.displayedUser.avatar_url} alt="" />
+				<div className="profilePicture">
+					<img src={`${this.state.displayedUser.avatar_url}`} alt="profile" />
 				</div>
 				<h3>{this.state.displayedUser.username}'s articles:</h3>
-				<ArticleList displayedUser={this.state.displayedUser.username} articles={this.state.articles} />
+				<ArticleList query={{ author: this.state.displayedUser.username }} loggedInUser={loggedInUser} />
 				<h3> users Comments</h3>
-				{/* <Comments /> */}
 			</div>
-		);
+		) : null;
 	}
 }
 
