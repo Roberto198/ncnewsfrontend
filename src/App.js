@@ -26,9 +26,8 @@ class App extends React.Component {
 	}
 
 	render() {
-		let { loggedInUser, searchTerm, articles } = this.state;
+		let { loggedInUser, searchTerm } = this.state;
 
-		// console.dir(localStorage.getItem('user'));
 		return (
 			<div className="App">
 				<Router>

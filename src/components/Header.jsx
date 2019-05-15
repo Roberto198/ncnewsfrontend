@@ -20,27 +20,24 @@ class Header extends React.Component {
 					<div className="mainHeader">
 						{this.props.loggedInUser === null ? (
 							<span className="loginControl">
-								Login : <input type="text" onChange={this.handleInput} defaultValue="E.g.: jessjelly" />
-								<button type="submit" onClick={this.submitUsername}>
-									Go!
-								</button>
+								<form onSubmit={this.submitUsername}>
+									Login :{' '}
+									<input type="text" onChange={this.handleInput} defaultValue="E.g.: jessjelly" />
+									<button type="submit">Go!</button>
+								</form>
 							</span>
 						) : (
 							<span className="loginControl">
 								<Link to={`/users/${this.props.loggedInUser.username}`}>Profile.</Link>
-								<Link to="/" onClick={this.logOut}>
-									Logout.
-								</Link>
+								<span onClick={this.logOut}>Logout.</span>
 							</span>
 						)}
 						<span>NCNews</span> <hr />{' '}
 						<span className="searchBox">
-							<input type="text" onChange={this.updateSearch} value={this.state.search} />
-
-							<button type="submit" onClick={this.submitSearch}>
-								Submit
-							</button>
-
+							<form onSubmit={this.submitSearch}>
+								<input type="text" onChange={this.updateSearch} value={this.state.search} />
+								<button type="submit">Submit</button>
+							</form>
 							<button onClick={this.exitSearch}>Reset</button>
 						</span>
 						<Link to="/topics">

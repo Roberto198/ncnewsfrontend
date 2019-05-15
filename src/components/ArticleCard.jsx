@@ -2,33 +2,33 @@ import React from 'react';
 import { Link } from '@reach/router';
 
 class ArticleCard extends React.Component {
-	state = {};
+	state = {
+		vote: 0,
+	};
 
-	componentDidUpdate() {
-		if (
-			this.props.article !== this.state.article ||
-			this.props.loggedInUser !== this.state.loggedInUser ||
-			this.props.id !== this.state.id
-		) {
-			this.setState({ article: this.props.article, loggedInUser: this.props.loggedInUser });
-		}
+	componentDidUpdate(prevProps) {
+		if (this.props.loggedInUser !== prevProps.loggedInUser)
+			this.setState({ loggedInUser: this.props.loggedInUser });
 	}
 
 	componentDidMount() {
-		let { article, loggedInUser } = this.props;
-		this.setState({ article, loggedInUser });
+		this.setState({ loggedInUser: this.props.loggedInUser });
 	}
 
 	render() {
 		let { article } = this.props;
 		return (
 			<div className="listedArticle" key={article.article_id}>
-				{this.state.loggedInUser && (
+				{this.props.loggedInUser && (
 					<div>
-						Votes: {article.votes} {'  '}
-						<button onClick={this.voteUp}>👍</button>
-						<button onClick={this.voteUp}>👎</button>
-						<button onClick={this.voteUp}>❌</button>
+						Votes: {article.votes + this.state.vote} {'  '}
+						{this.props.loggedInUser.username === this.props.article.author ? (
+							<button onClick={this.remove}>
+								<span role="img" aria-label="Remove!">
+									❌
+								</span>
+							</button>
+						) : null}
 					</div>
 				)}
 				<Link to={`/article/${article.article_id}`}>
@@ -42,8 +42,6 @@ class ArticleCard extends React.Component {
 			</div>
 		);
 	}
-
-	voteUp = () => {};
 }
 
 export default ArticleCard;

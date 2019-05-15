@@ -6,7 +6,7 @@ import ArticleCard from './ArticleCard';
 
 class ArticleList extends React.Component {
 	state = {
-		articles: [],
+		articles: null,
 		searchTerm: '',
 	};
 
@@ -14,9 +14,6 @@ class ArticleList extends React.Component {
 		if (prevState.loggedInUser !== this.props.loggedInUser) {
 			this.setState({ loggedInUser: this.props.loggedInUser });
 		}
-		// if (this.props.id !== prevProps.id) {
-		// 	this.setState({ displayedUser: this.props.id });
-		// }
 
 		if (this.props.searchTerm !== prevState.searchTerm) {
 			if (!this.props.searchTerm) {
@@ -24,7 +21,7 @@ class ArticleList extends React.Component {
 					this.setState({ articles, searchTerm: this.props.searchTerm });
 				});
 			}
-			if (this.props.id != this.state.displayedUser) {
+			if (this.props.id !== this.state.displayedUser) {
 				this.setState({ displayedUser: this.props.id });
 			}
 			if (this.props.searchTerm !== prevProps.searchTerm) {
@@ -80,7 +77,7 @@ class ArticleList extends React.Component {
 					<h3>Search :'{this.props.searchTerm}'</h3>
 				) : null}
 
-				{articles.length > 1 ? (
+				{articles ? (
 					articles.map(article => {
 						return <ArticleCard article={article} loggedInUser={loggedInUser} />;
 					})
