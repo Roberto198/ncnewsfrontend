@@ -15,14 +15,9 @@ class App extends React.Component {
 		searchTerm: '',
 	};
 
-	componentDidUpdate(prevState) {
-		if (this.state.loggedInUser !== prevState.loggedInUser) {
-			this.render();
-		}
-	}
-
 	componentDidMount() {
-		console.log(localStorage.getItem('user'), '<-local storgae');
+		const loggedInUser = localStorage.getItem('user');
+		this.setState({ loggedInUser });
 	}
 
 	render() {
@@ -39,7 +34,7 @@ class App extends React.Component {
 						setUsername={this.setUsername}
 					/>
 				</Router>
-				<Router>
+				<Router className="mediaArea">
 					<Profile path="/users/:id" loggedInUser={loggedInUser} />
 					<Topics path="/topics" loggedInUser={loggedInUser} />
 					<TopicPage path="/topics/:id" loggedInUser={loggedInUser} />
@@ -64,7 +59,8 @@ class App extends React.Component {
 	setUsername = username => {
 		axiosGetUser(username).then(({ data: user }) =>
 			this.setState({ loggedInUser: user[0] }, () => {
-				localStorage.setItem('user', user);
+				console.log(user);
+				localStorage.setItem('user', user[0].username);
 			})
 		);
 	};

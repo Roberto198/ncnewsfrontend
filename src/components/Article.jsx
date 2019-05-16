@@ -1,23 +1,24 @@
 import React from 'react';
 import Axios from 'axios';
 import Comments from './Comments';
-import { axiosGetAllArticles } from '../api/axios';
+import { axiosGetAllArticles, axiosRemove, axiosGetArticleComments } from '../api/axios';
 import { axiosIncVotes } from '../api/axios';
 import { Link } from '@reach/router';
 import VoteButtons from './VoteButtons';
+import AddComment from './AddComment';
 
 class Article extends React.Component {
 	state = {
-		article: [],
+		article: undefined,
 		vote: 0,
 		loggedInUser: null,
+		newComment: null,
+		isLoading: true,
 	};
 
 	componentDidMount() {
-		// axiosGetAllArticles({article_id : })
-		let url = `https://northcodersapinews.herokuapp.com/api/articles/${this.props.id}`;
-		Axios.get(url).then(({ data: { article } }) => {
-			this.setState({ article: article, loggedInUser: this.props.loggedInUser });
+		axiosGetAllArticles({}, this.props.id).then(({ data: { article } }) => {
+			this.setState({ article, loggedInUser: this.props.loggedInUser, isLoading: false });
 		});
 	}
 
@@ -27,39 +28,58 @@ class Article extends React.Component {
 	}
 
 	render() {
-		const { title, body, votes, topic, author } = this.state.article;
-		return (
-			<div>
-				<div className="article">
-					<p className="title">{title}</p>
-					<span className="detail">
-						By: <Link to={`/users/${author}`}>{author}</Link>
-						{'     '}
-						Topic: <Link to={`/topics/${topic}`}>{topic}</Link>
-						{'  '}
-						Votes: {votes + this.state.vote}
-					</span>
+		if (this.state.isLoading) {
+			return <h3> Loading...</h3>;
+		} else {
+			const { title, body, votes, topic, author } = this.state.article;
 
-					<span className="body">{body}</span>
+			return (
+				<div>
+					<div>
+						<div className="article">
+							<p className="title">{title}</p>
+							<span className="detail">
+								By: <Link to={`/users/${author}`}>{author}</Link>
+								{'     '}
+								Topic: <Link to={`/topics/${topic}`}>{topic}</Link>
+								{'  '}
+								Votes: {votes + this.state.vote}
+							</span>
 
-					<VoteButtons
-						loggedInUser={this.props.loggedInUser}
-						voteFunc={this.vote}
-						voteValue={this.state.vote}
-						author={this.state.article.author}
-						path={this.props.path}
-					/>
+							<span className="body">{body}</span>
+
+							{this.props.loggedInUser && (
+								<div>
+									<VoteButtons
+										loggedInUser={this.props.loggedInUser}
+										voteFunc={this.vote}
+										remove={this.remove}
+										voteValue={this.state.vote}
+										author={this.state.article.author}
+										path={this.props.path}
+										id={this.props.id}
+										media="articles"
+									/>
+								</div>
+							)}
+						</div>
+						<Comments article={this.props.id} loggedInUser={this.props.loggedInUser} />
+						{}
+					</div>
 				</div>
-				<Comments article={this.props.id} />
-			</div>
-		);
+			);
+		}
 	}
 
-	vote = direction => {
-		axiosIncVotes(direction, 'articles', this.state.article.article_id);
+	vote = (direction, id) => {
+		axiosIncVotes(direction, 'articles', id);
 		this.setState(prevState => {
 			return { vote: prevState.vote + direction };
 		});
+	};
+
+	remove = (media, id) => {
+		axiosRemove(media, id).then(res => console.log(res));
 	};
 }
 

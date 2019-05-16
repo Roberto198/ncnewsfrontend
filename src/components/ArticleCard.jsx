@@ -19,10 +19,14 @@ class ArticleCard extends React.Component {
 		let { article } = this.props;
 		return (
 			<div className="listedArticle" key={article.article_id}>
+				<Link to={`/article/${article.article_id}`}>
+					<span className="listedArticleTitle">{article.title}</span>
+				</Link>
+				<hr />
 				{this.props.loggedInUser && (
 					<div>
 						Votes: {article.votes + this.state.vote} {'  '}
-						{this.props.loggedInUser.username === this.props.article.author ? (
+						{this.props.loggedInUser === this.props.article.author ? (
 							<button onClick={this.remove}>
 								<span role="img" aria-label="Remove!">
 									❌
@@ -31,9 +35,6 @@ class ArticleCard extends React.Component {
 						) : null}
 					</div>
 				)}
-				<Link to={`/article/${article.article_id}`}>
-					<h3>{article.title}</h3>
-				</Link>
 
 				<p>
 					<Link to={`/users/${article.author}`}>{article.author}</Link> -{article.created_at} -{' '}

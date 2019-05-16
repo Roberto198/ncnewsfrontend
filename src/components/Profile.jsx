@@ -18,6 +18,7 @@ class Profile extends React.Component {
 
 	componentDidMount() {
 		axiosGetUser(this.props.id).then(({ data }) => {
+			//search for a users comments, Comments changed to have minimal state
 			this.setState({ displayedUser: data[0], loggedInUser: this.props.loggedInUser });
 		});
 	}
