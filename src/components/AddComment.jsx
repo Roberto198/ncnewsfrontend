@@ -40,16 +40,20 @@ class AddComment extends Component {
 	};
 
 	addComment(body, username, id) {
-		axiosPostComment(body, username, id);
-		this.setState({ addComment: false }, () => {
-			this.props.pushComment({
-				author: username,
-				body,
-				created_at: new Date().toUTCString(),
-				comment_id: new Date().toUTCString(),
-				votes: 0,
+		if (this.body) {
+			axiosPostComment(body, username, id);
+			this.setState({ addComment: false }, () => {
+				this.props.pushComment({
+					author: username,
+					body,
+					created_at: new Date().toUTCString(),
+					comment_id: new Date().toUTCString(),
+					votes: 0,
+				});
 			});
-		});
+		} else {
+			alert('Please enter a comment to post!');
+		}
 	}
 }
 
