@@ -58,6 +58,9 @@ div.sticky {
 	padding-left: 1.5vw;
 	padding-top: 1.5vw;
 }
+.loginControl form {
+	border-top: 0px;
+}
 form {
 	border-top: 20px solid rgb(192, 2, 2);
 	padding: 2.5vh 0vh;
