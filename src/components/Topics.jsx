@@ -11,24 +11,24 @@ class Topics extends React.Component {
 	render() {
 		const { topics } = this.state;
 		return (
-			<div>
+			<div className="topicBody">
 				<h2> Current Topics:</h2>
-				<ul>
+				<div className="topicListWrapper">
 					{topics
 						? topics.map(topic => {
 								return (
-									<li key={topic.slug}>
+									<div className="topicCard" key={topic.slug}>
 										{' '}
 										<Link to={`/topics/${topic.slug}`}>
 											{' '}
-											{topic.slug}
-											<p>-- {topic.description}</p>
+											<span className="topicTitle">{topic.slug}</span>
+											<p class="topicLinks">-- {topic.description}</p>
 										</Link>
-									</li>
+									</div>
 								);
 						  })
 						: null}
-				</ul>
+				</div>
 			</div>
 		);
 	}

@@ -12,6 +12,7 @@ class ArticleList extends React.Component {
 		p: 1,
 		pages: null,
 		limit: 10,
+		loading: true,
 	};
 
 	fetch() {
@@ -24,13 +25,14 @@ class ArticleList extends React.Component {
 				searchTerm: this.props.searchTerm,
 				article_count,
 				pages: Math.ceil(article_count / this.state.limit),
+				loading: false,
 			});
 		});
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (prevState.loggedInUser !== this.props.loggedInUser) {
-			this.setState({ loggedInUser: this.props.loggedInUser });
+		if (prevProps.loggedInUser !== this.props.loggedInUser) {
+			this.setState({ loggedInUser: this.props.loggedInUser, loading: true });
 		}
 		if (prevState.p !== this.state.p) {
 			this.fetch();
@@ -38,49 +40,27 @@ class ArticleList extends React.Component {
 		if (this.props.searchTerm !== this.state.searchTerm) {
 			this.fetch();
 		}
-
-		// if (this.props.searchTerm !== prevState.searchTerm) {
-		// 	if (!this.props.searchTerm) {
-		// 		axiosGetAllArticles({ params: { ...this.props.query, p: this.state, limit: this.state.limit } }).then(
-		// 			({ data: { articles } }) => {
-		// 				this.setState({ articles, searchTerm: this.props.searchTerm });
-		// 			}
-		// 		);
-		// 	}
-		// 	if (this.props.searchTerm !== prevProps.searchTerm) {
-		// 		axiosArticlesRequest(
-		// 			{ params: { ...this.props.query, p: this.state.p, limit: this.state.limit } },
-		// 			this.props.searchTerm
-		// 		).then(({ data: { articles } }) => {
-		// 			this.setState({
-		// 				articles,
-		// 				searchTerm: this.props.searchTerm,
-		// 			});
-		// 		});
-		// 	}
-		// }
 	}
 
 	componentDidMount() {
-		console.log(this.props.query, '<-query');
-		console.log(this.state.p, '<-P');
-		console.log(this.state.limit, '<-limit');
 		axiosArticlesRequest(
 			{ params: { ...this.props.query, p: this.state.p, limit: this.state.limit } },
 			this.props.searchTerm
 		).then(({ data: { articles, article_count } }) => {
+			console.log(articles);
 			this.setState({
 				articles,
 				article_count,
 				searchTerm: this.props.searchTerm,
 				loggedInUser: this.props.loggedInUser,
 				pages: Math.ceil(article_count / this.state.limit),
+				loading: false,
 			});
 		});
 	}
 
 	render() {
-		let { articles, loggedInUser, article_count, p } = this.state;
+		let { articles, loggedInUser, article_count, p, pages } = this.state;
 		return (
 			<div className="articlesListWrapper">
 				<SortButtons reSort={this.getSortedArticles} query={this.props.query} context="articles" />
@@ -90,7 +70,7 @@ class ArticleList extends React.Component {
 				{article_count ? (
 					<div className="listDetails">
 						<span>
-							Articles found: {article_count} Page: {p}
+							Articles found: {article_count} Page: {p} of {pages} :
 						</span>
 						<button
 							onClick={() => {
@@ -110,11 +90,19 @@ class ArticleList extends React.Component {
 				) : null}
 				<div className="listContainer">
 					{articles ? (
-						articles.map(article => {
-							return (
-								<ArticleCard article={article} loggedInUser={loggedInUser} key={article.article_id} />
-							);
-						})
+						articles.length > 0 ? (
+							articles.map(article => {
+								return (
+									<ArticleCard
+										article={article}
+										loggedInUser={loggedInUser}
+										key={article.article_id}
+									/>
+								);
+							})
+						) : (
+							<h3>No articles found!</h3>
+						)
 					) : (
 						<h3>Loading...</h3>
 					)}
@@ -126,11 +114,11 @@ class ArticleList extends React.Component {
 	getSortedArticles = param => {
 		if (!this.state.searchTerm) {
 			axiosGetAllArticles({ params: param }).then(({ data: { articles } }) => {
-				this.setState({ articles });
+				this.setState({ articles, p: 1 });
 			});
 		} else {
 			axiosArticlesRequest({ params: param }, `/${this.state.searchTerm}`).then(({ data: { articles } }) => {
-				this.setState({ articles });
+				this.setState({ articles, p: 1 });
 			});
 		}
 	};

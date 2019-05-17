@@ -23,8 +23,8 @@ class ArticleCard extends React.Component {
 					<span className="listedArticleTitle">{article.title}</span>
 				</Link>
 				<hr />
-				{this.props.loggedInUser && (
-					<div>
+				<div className="articleCardDetail">
+					<div className="votes">
 						Votes: {article.votes + this.state.vote} {'  '}
 						{this.props.loggedInUser === this.props.article.author ? (
 							<button onClick={this.remove}>
@@ -34,14 +34,22 @@ class ArticleCard extends React.Component {
 							</button>
 						) : null}
 					</div>
-				)}
 
-				<p>
-					<Link to={`/users/${article.author}`}>{article.author}</Link> -{article.created_at} -{' '}
-					<Link to={`/topics/${article.topic}`}>{article.topic}</Link>
-				</p>
+					<div className="links">
+						<div className="author">
+							Author: <Link to={`/users/${article.author}`}>{article.author}</Link>
+						</div>
+						<div className="date">Published : {this.createDate(article.created_at)}</div>
+						<div className="topic">
+							Topic: <Link to={`/topics/${article.topic}`}>{article.topic}</Link>
+						</div>
+					</div>
+				</div>
 			</div>
 		);
+	}
+	createDate(stamp) {
+		return new Date(stamp).toDateString();
 	}
 }
 

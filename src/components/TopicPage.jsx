@@ -22,9 +22,9 @@ class TopicPage extends React.Component {
 	}
 	render() {
 		return (
-			<div>
+			<div className="topics">
 				<h2>Articles under the topic '{this.props.id}':</h2>
-				<ArticleList query={{ topic: this.props.id }} loggedInUser={this.state.loggedInUser} />
+				<ArticleList query={{ topic: this.props.id }} loggedInUser={this.state.loggedInUser} searchTerm="" />
 			</div>
 		);
 	}

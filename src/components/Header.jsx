@@ -26,11 +26,11 @@ class Header extends React.Component {
 						</span>
 					) : (
 						<span className="loginControl">
-							<Link to={`/users/${this.props.loggedInUser.username}`}>Profile.</Link>
+							<Link to={`/users/${this.props.loggedInUser}`}>Profile.</Link>
 							<span onClick={this.logOut}>Logout.</span>
 						</span>
 					)}
-					<span className="ncnews">NCNews</span> <hr />{' '}
+					<span className="ncnews">NCNews</span>{' '}
 					<span className="searchBox">
 						<form onSubmit={this.submitSearch}>
 							<input type="text" onChange={this.updateSearch} value={this.state.search} />

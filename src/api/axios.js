@@ -1,12 +1,13 @@
 import Axios from 'axios';
+import { navigate } from '@reach/router';
 
 let url = 'https://northcodersapinews.herokuapp.com/api';
 
 export const axiosGetAllArticles = (query = {}, articleID = '') => {
 	return Axios.get(`${url}/articles/${articleID}`, query);
 };
+
 export const axiosArticlesRequest = (query = {}, searchTerm) => {
-	console.log(query, '<-query	');
 	return Axios.get(`${url}/search/${searchTerm}`, query);
 };
 export const axiosGetUser = user => {

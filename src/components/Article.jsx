@@ -14,12 +14,17 @@ class Article extends React.Component {
 		loggedInUser: null,
 		newComment: null,
 		isLoading: true,
+		err: null,
 	};
 
 	componentDidMount() {
-		axiosGetAllArticles({}, this.props.id).then(({ data: { article } }) => {
-			this.setState({ article, loggedInUser: this.props.loggedInUser, isLoading: false });
-		});
+		axiosGetAllArticles({}, this.props.id)
+			.then(({ data: { article } }) => {
+				this.setState({ article, loggedInUser: this.props.loggedInUser, isLoading: false });
+			})
+			.catch(({ response: { data } }) => {
+				this.setState({ err: data, isLoading: false });
+			});
 	}
 
 	componentDidUpdate(prevProps) {
@@ -30,8 +35,16 @@ class Article extends React.Component {
 	render() {
 		if (this.state.isLoading) {
 			return <h3> Loading...</h3>;
+		}
+		if (this.state.err) {
+			return (
+				<div className="err">
+					{' '}
+					<h3> Error: {this.state.err.msg}</h3>
+				</div>
+			);
 		} else {
-			const { title, body, votes, topic, author } = this.state.article;
+			const { title, body, votes, topic, author, comment_count, created_at } = this.state.article;
 
 			return (
 				<div>
@@ -40,16 +53,20 @@ class Article extends React.Component {
 							<p className="title">{title}</p>
 							<span className="detail">
 								By: <Link to={`/users/${author}`}>{author}</Link>
-								{'     '}
+								<br />
 								Topic: <Link to={`/topics/${topic}`}>{topic}</Link>
-								{'  '}
+								<br />
 								Votes: {votes + this.state.vote}
+								<br />
+								Comments: {comment_count}
+								<br />
+								Written: {new Date(created_at).toDateString()}
 							</span>
 
 							<span className="body">{body}</span>
 
 							{this.props.loggedInUser && (
-								<div>
+								<div className="articleVoteButtons">
 									<VoteButtons
 										loggedInUser={this.props.loggedInUser}
 										voteFunc={this.vote}

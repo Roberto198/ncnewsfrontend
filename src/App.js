@@ -5,6 +5,7 @@ import Profile from './components/Profile';
 import ArticleList from './components/ArticleList';
 import Topics from './components/Topics';
 import TopicPage from './components/TopicPage.jsx';
+import RouteError from './components/RouteError';
 import './css/index.css';
 import { Router, navigate } from '@reach/router';
 import { axiosGetUser } from './api/axios';
@@ -25,26 +26,29 @@ class App extends React.Component {
 
 		return (
 			<div className="App">
-				<Router>
-					<Header
-						path="/*"
-						loggedInUser={loggedInUser}
-						logOut={this.logOut}
-						basicSearch={this.basicSearch}
-						setUsername={this.setUsername}
-					/>
-				</Router>
+				<div className="sticky">
+					<Router>
+						<Header
+							path="/*"
+							loggedInUser={loggedInUser}
+							logOut={this.logOut}
+							basicSearch={this.basicSearch}
+							setUsername={this.setUsername}
+						/>
+					</Router>
+				</div>
 				<Router className="mediaArea">
 					<Profile path="/users/:id" loggedInUser={loggedInUser} />
 					<Topics path="/topics" loggedInUser={loggedInUser} />
 					<TopicPage path="/topics/:id" loggedInUser={loggedInUser} />
 					<ArticleList
-						path="/*"
+						path="/"
 						searchTerm={searchTerm}
 						basicSearch={this.basicSearch}
 						loggedInUser={loggedInUser}
 					/>
 					<Article path="/article/:id" loggedInUser={loggedInUser} />
+					<RouteError path="/*" />
 				</Router>
 			</div>
 		);
@@ -58,8 +62,8 @@ class App extends React.Component {
 
 	setUsername = username => {
 		axiosGetUser(username).then(({ data: user }) =>
-			this.setState({ loggedInUser: user[0] }, () => {
-				console.log(user);
+			this.setState({ loggedInUser: user[0].username }, () => {
+				console.log(user, '<-user');
 				localStorage.setItem('user', user[0].username);
 			})
 		);

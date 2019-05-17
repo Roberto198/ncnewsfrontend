@@ -37,14 +37,16 @@ class Comments extends React.Component {
 		return (
 			<div className="commentDiv">
 				{this.props.article && this.props.loggedInUser && (
-					<AddComment
-						id={this.props.article}
-						pushComment={this.pushComment}
-						loggedInUser={this.props.loggedInUser}
-					/>
+					<div className="addCommentParentDiv">
+						<AddComment
+							id={this.props.article}
+							pushComment={this.pushComment}
+							loggedInUser={this.props.loggedInUser}
+						/>
+					</div>
 				)}
 				{this.state.comment_count ? <h3>Comments found: {this.state.comment_count}</h3> : null}
-				Page: {this.state.p}
+				Page: {this.state.p} of {this.state.pages} :{'  '}
 				<button
 					onClick={() => {
 						this.pageNav(-1);
@@ -60,7 +62,6 @@ class Comments extends React.Component {
 					Next
 				</button>
 				<SortButtons reSort={this.getNewComments} context="comments" query={{}} />
-				<div className="commentsHeader">Comments : </div>
 				{this.state.comments &&
 					this.state.comments.map(comment => {
 						let date = comment.created_at;

@@ -7,7 +7,7 @@ class AddComment extends Component {
 	};
 	render() {
 		return (
-			<div>
+			<div className="addCommentElementDiv">
 				<button
 					onClick={() => {
 						this.setState({ addComment: !this.state.addComment });
@@ -24,7 +24,9 @@ class AddComment extends Component {
 								this.addComment(this.state.commentField, this.props.loggedInUser, this.props.id);
 							}}
 						>
-							<input type="text" onChange={this.handleInput} />
+							{' '}
+							{this.props.loggedInUser} :{'  '}
+							<input type="text" className="addCommentForm" onChange={this.handleInput} />
 							<button type="submit">Post!</button>
 						</form>
 					</div>
