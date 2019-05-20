@@ -1,5 +1,5 @@
 import React from 'react';
-import ArticleList from './ArticleList';
+import ArticlesContainer from './ArticlesContainer';
 import { axiosGetUser } from '../api/axios';
 import Comments from './Comments';
 
@@ -49,8 +49,8 @@ class Profile extends React.Component {
 						<img src={`${this.state.displayedUser.avatar_url}`} alt="profile" />
 					</div>
 					<h3>{this.state.displayedUser.username}'s articles:</h3>
-					<div className="profilesarticlelist" />
-					<ArticleList
+					<div className="profilesArticlesContainer" />
+					<ArticlesContainer
 						query={{ author: this.state.displayedUser.username }}
 						searchTerm=""
 						loggedInUser={loggedInUser}

@@ -1,11 +1,31 @@
-import React from 'react';
-import { Link } from '@reach/router';
+import React, { Fragment } from 'react';
 import { axiosArticlesRequest, axiosGetAllArticles } from '../api/axios';
-import Article from './Article';
-import ArticleCard from './ArticleCard';
+import ArticlesList from './ArticlesList';
 import SortButtons from './SortButtons';
+import Pagination from './Pagination';
+import { AppBar, Typography, withStyles, Toolbar, Button, Fab, Grid } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
-class ArticleList extends React.Component {
+const styles = {
+	root: {
+		flexGrow: 1,
+	},
+	grow: {
+		flexGrow: 1,
+	},
+	menuButton: {
+		marginLeft: -12,
+		marginRight: 20,
+	},
+	pageCount: {
+		display: 'inline',
+	},
+	listDetails: {
+		alignItems: 'center',
+	},
+};
+
+class ArticlesContainer extends React.Component {
 	state = {
 		articles: null,
 		searchTerm: '',
@@ -60,52 +80,29 @@ class ArticleList extends React.Component {
 	}
 
 	render() {
+		// const { classes } = this.props;
 		let { articles, loggedInUser, article_count, p, pages } = this.state;
 		return (
-			<div className="articlesListWrapper">
-				<SortButtons reSort={this.getSortedArticles} query={this.props.query} context="articles" />
-				{this.props.searchTerm && this.props.searchTerm.length > 1 ? (
-					<h3>Search :'{this.props.searchTerm}'</h3>
-				) : null}
-				{article_count ? (
-					<div className="listDetails">
-						<span>
-							Articles found: {article_count} Page: {p} of {pages} :
-						</span>
-						<button
-							onClick={() => {
-								this.pageNav(-1);
-							}}
-						>
-							Prev
-						</button>
-						<button
-							onClick={() => {
-								this.pageNav(1);
-							}}
-						>
-							Next
-						</button>
-					</div>
-				) : null}
-				<div className="listContainer">
-					{articles ? (
-						articles.length > 0 ? (
-							articles.map(article => {
-								return (
-									<ArticleCard
-										article={article}
-										loggedInUser={loggedInUser}
-										key={article.article_id}
-									/>
-								);
-							})
-						) : (
-							<h3>No articles found!</h3>
-						)
-					) : (
-						<h3>Loading...</h3>
+			<div>
+				<SortButtons style={{ zIndex: '0' }} reSort={this.getSortedArticles} query={this.props.query} />
+
+				<div className="articlesListWrapper">
+					{article_count && (
+						<Pagination
+							article_count={article_count}
+							p={p}
+							pages={pages}
+							pageNav={this.pageNav}
+							searchTerm={this.props.searchTerm}
+						/>
 					)}
+
+					<div>
+						{!articles && <h3>Loading...</h3>}
+						{articles && articles.length === 0 && <h3>No articles found!</h3>}
+
+						{articles && <ArticlesList articles={articles} loggedInUser={this.props.loggedInUser} />}
+					</div>
 				</div>
 			</div>
 		);
@@ -130,4 +127,8 @@ class ArticleList extends React.Component {
 	};
 }
 
-export default ArticleList;
+ArticlesContainer.propTypes = {
+	classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(ArticlesContainer);

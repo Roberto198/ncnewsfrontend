@@ -1,6 +1,6 @@
 import React from 'react';
 import { axiosGetAllArticles } from '../api/axios';
-import ArticleList from './ArticleList';
+import ArticlesContainer from './ArticlesContainer';
 
 class TopicPage extends React.Component {
 	state = {
@@ -24,7 +24,11 @@ class TopicPage extends React.Component {
 		return (
 			<div className="topics">
 				<h2>Articles under the topic '{this.props.id}':</h2>
-				<ArticleList query={{ topic: this.props.id }} loggedInUser={this.state.loggedInUser} searchTerm="" />
+				<ArticlesContainer
+					query={{ topic: this.props.id }}
+					loggedInUser={this.state.loggedInUser}
+					searchTerm=""
+				/>
 			</div>
 		);
 	}

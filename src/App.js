@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './components/Header';
 import Article from './components/Article';
 import Profile from './components/Profile';
-import ArticleList from './components/ArticleList';
+import ArticlesContainer from './components/ArticlesContainer';
 import Topics from './components/Topics';
 import TopicPage from './components/TopicPage.jsx';
 import RouteError from './components/RouteError';
@@ -41,7 +41,7 @@ class App extends React.Component {
 					<Profile path="/users/:id" loggedInUser={loggedInUser} />
 					<Topics path="/topics" loggedInUser={loggedInUser} />
 					<TopicPage path="/topics/:id" loggedInUser={loggedInUser} />
-					<ArticleList
+					<ArticlesContainer
 						path="/"
 						searchTerm={searchTerm}
 						basicSearch={this.basicSearch}

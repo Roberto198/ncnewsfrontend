@@ -1,35 +1,84 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles, Fab } from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
-class SortButtons extends Component {
-	render() {
-		return (
-			<div className="sortButtons">
-				<button
-					onClick={() => {
-						this.props.reSort({ ...this.props.query, sort_by: 'created_at' });
-					}}
-				>
-					NEW
-				</button>
-				<button
-					onClick={() => {
-						this.props.reSort({ ...this.props.query, sort_by: 'votes' });
-					}}
-				>
-					TOP
-				</button>
-				{this.props.context === 'articles' && (
-					<button
+const styles = theme => ({
+	root: {
+		flexGrow: 1,
+		display: 'flex',
+	},
+	toolbar: theme.mixins.toolbar,
+	fab: {
+		margin: theme.spacing.unit,
+	},
+	extendedIcon: {
+		marginRight: theme.spacing.unit,
+	},
+});
+
+function SortButtons(props) {
+	const { classes } = props;
+
+	return (
+		<div>
+			<div className="classes.toolbar" />
+			<div className={classes.root}>
+				{/* <AppBar position="static" color="default"> */}
+				<Toolbar>
+					<Fab
+						size="small"
+						color="primary"
+						variant="extended"
+						aria-label="Add"
+						className={classes.fab}
 						onClick={() => {
-							this.props.reSort({ ...this.props.query, sort_by: 'comment_count' });
+							props.reSort({ ...props.query, sort_by: 'created_at' });
 						}}
 					>
-						MOST COMMENTS
-					</button>
-				)}
+						New!
+					</Fab>
+					<Fab
+						size="small"
+						color="primary"
+						variant="extended"
+						aria-label="Add"
+						className={classes.fab}
+						onClick={() => {
+							props.reSort({ ...props.query, sort_by: 'comment_count' });
+						}}
+					>
+						Most Comments!
+					</Fab>
+					<Fab
+						size="small"
+						color="primary"
+						variant="extended"
+						aria-label="Add"
+						className={classes.fab}
+						onClick={() => {
+							props.reSort({ ...props.query, sort_by: 'votes' });
+						}}
+					>
+						Most Likes!
+					</Fab>
+					{/* <Fab color="primary" variant="extended" aria-label="Add" className={classes.fab}>
+							Prev!
+						</Fab>
+						<Fab color="primary" variant="extended" aria-label="Add" className={classes.fab}>
+							Next!
+						</Fab> */}
+				</Toolbar>
+				{/* </AppBar> */}
 			</div>
-		);
-	}
+		</div>
+	);
 }
 
-export default SortButtons;
+SortButtons.propTypes = {
+	classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(SortButtons);

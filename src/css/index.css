@@ -1,4 +1,4 @@
-* {
+/* * {
 	box-sizing: border-box;
 }
 body {
@@ -31,7 +31,7 @@ a {
 }
 
 /* header */
-div.sticky {
+/* div.sticky {
 	position: -webkit-sticky;
 	position: sticky;
 	top: 0;
@@ -46,7 +46,7 @@ div.sticky {
 	text-align: center;
 	border-bottom: 5px solid rgb(192, 2, 2);
 	/* background-color: #71c9f8; */
-}
+/* }
 .ncnews {
 	font-size: 3em;
 }
@@ -72,7 +72,7 @@ form {
 
 /* body*/
 
-.articlesListWrapper {
+/* .articlesListWrapper {
 	display: inline;
 }
 .articlesListWrapper h3 {
@@ -81,9 +81,9 @@ form {
 
 .articlesListWrapper button {
 	margin: 0.5vh;
-}
+}  */
 
-.sortButtons {
+/* .sortButtons {
 	padding: 0.5vh;
 	margin-right: 10px;
 	display: inline-block;
@@ -135,10 +135,10 @@ form {
 .listedArticle .links {
 	float: left;
 	text-align: left;
-}
+} */
 
 /* article page */
-.article {
+/* .article {
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: column;
@@ -183,7 +183,7 @@ form {
 
 /* PROFILE */
 
-.profileWrapper {
+/* .profileWrapper {
 	color: white;
 }
 
@@ -207,17 +207,15 @@ form {
 	width: 60%;
 	height: 60px;
 }
-/* Comments */
+
 
 .commentBody {
 	margin-top: 1.5vh;
 	padding: 1vh;
 	border: 2px black solid;
-}
+} */
 
-/* TOPCICS */
-
-.topics h2 {
+/* .topics h2 {
 	color: white;
 }
 
@@ -248,8 +246,6 @@ form {
 	font-size: 1em;
 }
 
-/* Error */
-
 .error {
 	color: white;
-}
+}  */
