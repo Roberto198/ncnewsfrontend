@@ -1,18 +1,41 @@
 import React from 'react';
-import Axios from 'axios';
-import Comments from './Comments';
-import { axiosGetAllArticles, axiosRemove, axiosGetArticleComments } from '../api/axios';
-import { axiosIncVotes } from '../api/axios';
+import CommentsContainer from './CommentsContainer';
+import { axiosGetAllArticles, axiosRemove, axiosIncVotes } from '../api/axios';
 import { Link } from '@reach/router';
 import VoteButtons from './VoteButtons';
-import AddComment from './AddComment';
+import { Paper, Typography, withStyles } from '@material-ui/core';
+
+const styles = {
+	div: {
+		padding: '40px 20px',
+		margin: '5vw',
+		maxWidth: '900px',
+	},
+	body: {
+		textIndent: '20px',
+		initialLetter: '2',
+		maxWidth: '900px',
+	},
+
+	votes: {
+		textAlign: 'center',
+		paddingTop: '10px',
+		margin: '5vw',
+		maxWidth: '900px',
+	},
+	detail: {
+		display: 'flex',
+		justifyContent: 'center',
+		margin: '5vw',
+		padding: '10px',
+		maxWidth: '900px',
+	},
+};
 
 class Article extends React.Component {
 	state = {
 		article: undefined,
 		vote: 0,
-		loggedInUser: null,
-		newComment: null,
 		isLoading: true,
 		err: null,
 	};
@@ -20,19 +43,16 @@ class Article extends React.Component {
 	componentDidMount() {
 		axiosGetAllArticles({}, this.props.id)
 			.then(({ data: { article } }) => {
-				this.setState({ article, loggedInUser: this.props.loggedInUser, isLoading: false });
+				this.setState({ article, isLoading: false });
 			})
 			.catch(({ response: { data } }) => {
 				this.setState({ err: data, isLoading: false });
 			});
 	}
 
-	componentDidUpdate(prevProps) {
-		if (this.props.loggedInUser !== prevProps.loggedInUser)
-			this.setState({ loggedInUser: this.props.loggedInUser });
-	}
-
 	render() {
+		const { classes } = this.props;
+
 		if (this.state.isLoading) {
 			return <h3> Loading...</h3>;
 		}
@@ -47,11 +67,23 @@ class Article extends React.Component {
 			const { title, body, votes, topic, author, comment_count, created_at } = this.state.article;
 
 			return (
-				<div>
+				<div className={classes.wrapper}>
 					<div>
-						<div className="article">
-							<p className="title">{title}</p>
-							<span className="detail">
+						<Paper className={classes.div}>
+							<Typography variant="h4" p="20px" gutterBottom>
+								{title}
+							</Typography>
+							<Typography variant="subtitle2">By {author} </Typography>
+						</Paper>
+						<Paper className={classes.div}>
+							<div>
+								<Typography className={classes.body} variant="title" gutterBottom>
+									{body}
+								</Typography>
+							</div>
+						</Paper>
+						<Paper className={classes.div}>
+							<Typography>
 								By: <Link to={`/users/${author}`}>{author}</Link>
 								<br />
 								Topic: <Link to={`/topics/${topic}`}>{topic}</Link>
@@ -61,12 +93,9 @@ class Article extends React.Component {
 								Comments: {comment_count}
 								<br />
 								Written: {new Date(created_at).toDateString()}
-							</span>
-
-							<span className="body">{body}</span>
-
+							</Typography>
 							{this.props.loggedInUser && (
-								<div className="articleVoteButtons">
+								<div className={classes.votes}>
 									<VoteButtons
 										loggedInUser={this.props.loggedInUser}
 										voteFunc={this.vote}
@@ -79,10 +108,11 @@ class Article extends React.Component {
 									/>
 								</div>
 							)}
-						</div>
-						<Comments article={this.props.id} loggedInUser={this.props.loggedInUser} />
-						{}
-					</div>
+						</Paper>
+					</div>{' '}
+					<Paper className={classes.detail}>
+						<CommentsContainer article={this.props.id} loggedInUser={this.props.loggedInUser} />
+					</Paper>
 				</div>
 			);
 		}
@@ -100,4 +130,4 @@ class Article extends React.Component {
 	};
 }
 
-export default Article;
+export default withStyles(styles)(Article);

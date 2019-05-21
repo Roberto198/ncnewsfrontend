@@ -1,11 +1,20 @@
 import React from 'react';
-import Axios from 'axios';
-import { axiosGetArticleComments, axiosIncVotes, axiosRemove } from '../api/axios';
-import VoteButtons from './VoteButtons';
+import { axiosGetArticleComments, axiosRemove } from '../api/axios';
 import AddComment from './AddComment';
 import SortButtons from './SortButtons';
+import CommentCard from './CommentCard';
+import { withStyles } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
-class Comments extends React.Component {
+const style = {
+	root: {
+		width: '100%',
+		maxWidth: 1000,
+		textAlign: 'center',
+	},
+};
+
+class CommentsContainer extends React.Component {
 	state = {
 		comments: null,
 		comment_count: null,
@@ -34,10 +43,12 @@ class Comments extends React.Component {
 		);
 	}
 	render() {
+		const { classes } = this.props;
+
 		return (
-			<div className="commentDiv">
+			<div className={classes.root}>
 				{this.props.article && this.props.loggedInUser && (
-					<div className="addCommentParentDiv">
+					<div className={classes.addComment}>
 						<AddComment
 							id={this.props.article}
 							pushComment={this.pushComment}
@@ -63,29 +74,39 @@ class Comments extends React.Component {
 				</button>
 				<SortButtons reSort={this.getNewComments} context="comments" query={{}} />
 				{this.state.comments &&
-					this.state.comments.map(comment => {
-						let date = comment.created_at;
-						return (
-							<div className="commentBody" key={comment.comment_id}>
-								<p>{comment.body}</p>
-								{this.props.loggedInUser && (
-									<VoteButtons
-										loggedInUser={this.props.loggedInUser}
-										voteFunc={this.vote}
-										remove={this.remove}
-										voteValue={this.state.vote}
-										author={comment.author}
-										path={this.props.path}
-										id={comment.comment_id}
-										media="comments"
-									/>
-								)}
-								<span className="commentDetail">
-									{date} -- {comment.author} -- {comment.votes}
-								</span>
-							</div>
-						);
-					})}
+					this.state.comments.map(
+						comment => (
+							<CommentCard
+								comment={comment}
+								loggedInUser={this.props.loggedInUser}
+								remove={this.remove}
+							/>
+						)
+						// 	{
+						// 	let date = comment.created_at;
+						// 	return (
+						// 		<div className="commentBody" key={comment.comment_id}>
+						// 			<p>{comment.body}</p>
+						// 			{this.props.loggedInUser && (
+						// 				<VoteButtons
+						// 					loggedInUser={this.props.loggedInUser}
+						// 					voteFunc={this.vote}
+						// 					remove={this.remove}
+						// 					voteValue={this.state.vote}
+						// 					author={comment.author}
+						// 					path={this.props.path}
+						// 					id={comment.comment_id}
+						// 					media="comments"
+						// 				/>
+						// 			)}
+						// 			<span className="commentDetail">
+						// 				{date} -- {comment.author} -- {comment.votes}
+						// 			</span>
+						// 		</div>
+						// 	);
+						//
+						// }
+					)}
 			</div>
 		);
 	}
@@ -96,12 +117,6 @@ class Comments extends React.Component {
 			let newComments = [newCommentObj, ...prevState.comments];
 			console.log(newComments);
 			return { comments: newComments };
-		});
-	};
-	vote = (direction, id) => {
-		axiosIncVotes(direction, 'comments', id);
-		this.setState(prevState => {
-			return { vote: prevState.vote + direction };
 		});
 	};
 	remove = (media, id) => {
@@ -131,4 +146,8 @@ class Comments extends React.Component {
 	};
 }
 
-export default Comments;
+CommentsContainer.propTypes = {
+	classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(style)(CommentsContainer);

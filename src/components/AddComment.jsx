@@ -1,24 +1,55 @@
 import React, { Component } from 'react';
 import { axiosPostComment } from '../api/axios';
+import { Button, FormControl, TextField, InputLabel, withStyles, InputAdornment, IconButton } from '@material-ui/core';
+
+const styles = {
+	wrapper: {
+		display: 'flex',
+		justifyItems: 'center',
+		flexDirection: 'column',
+	},
+	form: {
+		display: 'block',
+		width: '95%',
+		margin: 'auto',
+	},
+};
 
 class AddComment extends Component {
 	state = {
 		addComment: false,
 	};
 	render() {
+		const { classes } = this.props;
 		return (
-			<div className="addCommentElementDiv">
-				<button
+			<div className={classes.wrapper}>
+				<Button
 					onClick={() => {
 						this.setState({ addComment: !this.state.addComment });
 					}}
 				>
-					Add Comment!
-				</button>
+					Add A Comment!
+				</Button>
 				<br />
 				{this.state.addComment && (
 					<div>
-						<form
+						<FormControl className={classes.form}>
+							<TextField
+								fullWidth="true"
+								label={this.props.loggedInUser}
+								multiline
+								rows="4"
+								margin="normal"
+								InputProps={{
+									endAdornment: (
+										<InputAdornment position="end">
+											<IconButton>post</IconButton>
+										</InputAdornment>
+									),
+								}}
+							/>
+						</FormControl>
+						{/* <form
 							onSubmit={e => {
 								e.preventDefault();
 								this.addComment(this.state.commentField, this.props.loggedInUser, this.props.id);
@@ -28,7 +59,7 @@ class AddComment extends Component {
 							{this.props.loggedInUser} :{'  '}
 							<input type="text" className="addCommentForm" onChange={this.handleInput} />
 							<button type="submit">Post!</button>
-						</form>
+						</form> */}
 					</div>
 				)}
 			</div>
@@ -40,9 +71,9 @@ class AddComment extends Component {
 	};
 
 	addComment(body, username, id) {
-		if (this.body) {
+		if (body) {
 			axiosPostComment(body, username, id);
-			this.setState({ addComment: false }, () => {
+			this.setState({ addComment: false, commentField: null }, () => {
 				this.props.pushComment({
 					author: username,
 					body,
@@ -52,9 +83,9 @@ class AddComment extends Component {
 				});
 			});
 		} else {
-			alert('Please enter a comment to post!');
+			alert('Please enter a comment to post.');
 		}
 	}
 }
 
-export default AddComment;
+export default withStyles(styles)(AddComment);

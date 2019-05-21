@@ -1,5 +1,5 @@
 import React from 'react';
-import { axiosPostComment } from '../api/axios';
+import { Button } from '@material-ui/core';
 
 class VoteButtons extends React.Component {
 	state = {
@@ -10,7 +10,8 @@ class VoteButtons extends React.Component {
 		return (
 			<div>
 				<div>
-					<button
+					<Button
+						size="large"
 						disabled={this.props.voteValue > 0}
 						onClick={() => {
 							this.props.voteFunc(1, this.props.id);
@@ -25,8 +26,9 @@ class VoteButtons extends React.Component {
 								✔
 							</span>
 						)}
-					</button>
-					<button
+					</Button>
+					<Button
+						size="large"
 						disabled={this.props.voteValue < 0}
 						onClick={() => {
 							this.props.voteFunc(-1, this.props.id);
@@ -41,21 +43,20 @@ class VoteButtons extends React.Component {
 								✔
 							</span>
 						)}
-					</button>
+					</Button>
+					{this.props.loggedInUser && this.props.loggedInUser === this.props.author && (
+						<Button
+							size="large"
+							onClick={() => {
+								this.props.remove(this.props.media, this.props.id);
+							}}
+						>
+							<span role="img" aria-label="Remove!">
+								❌
+							</span>
+						</Button>
+					)}
 				</div>
-
-				{this.props.loggedInUser && this.props.loggedInUser.username === this.props.author ? (
-					<button
-						onClick={() => {
-							this.props.remove(this.props.media, this.props.id);
-						}}
-					>
-						<span role="img" aria-label="Remove!">
-							❌
-						</span>
-					</button>
-				) : null}
-				{}
 			</div>
 		);
 	}

@@ -1,7 +1,7 @@
 import React from 'react';
 import ArticlesContainer from './ArticlesContainer';
 import { axiosGetUser } from '../api/axios';
-import Comments from './Comments';
+import CommentsContainter from './CommentsContainer';
 
 class Profile extends React.Component {
 	state = {

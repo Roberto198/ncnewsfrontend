@@ -6,9 +6,16 @@ import ArticlesContainer from './components/ArticlesContainer';
 import Topics from './components/Topics';
 import TopicPage from './components/TopicPage.jsx';
 import RouteError from './components/RouteError';
-import './css/index.css';
 import { Router, navigate } from '@reach/router';
 import { axiosGetUser } from './api/axios';
+import { withStyles } from '@material-ui/core';
+
+const styles = {
+	route: {
+		margin: 'auto',
+		maxWidth: '900px',
+	},
+};
 
 class App extends React.Component {
 	state = {
@@ -23,9 +30,10 @@ class App extends React.Component {
 
 	render() {
 		let { loggedInUser, searchTerm } = this.state;
+		let { classes } = this.props;
 
 		return (
-			<div className="App">
+			<div className={classes.app}>
 				<div className="sticky">
 					<Router>
 						<Header
@@ -37,7 +45,7 @@ class App extends React.Component {
 						/>
 					</Router>
 				</div>
-				<Router className="mediaArea">
+				<Router className={classes.route}>
 					<Profile path="/users/:id" loggedInUser={loggedInUser} />
 					<Topics path="/topics" loggedInUser={loggedInUser} />
 					<TopicPage path="/topics/:id" loggedInUser={loggedInUser} />
@@ -74,4 +82,4 @@ class App extends React.Component {
 	};
 }
 
-export default App;
+export default withStyles(styles)(App);
