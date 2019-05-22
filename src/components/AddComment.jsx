@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { axiosPostComment } from '../api/axios';
-import { Button, FormControl, TextField, InputLabel, withStyles, InputAdornment, IconButton } from '@material-ui/core';
+import { Button, TextField, InputLabel, withStyles, InputAdornment, Icon } from '@material-ui/core';
 
 const styles = {
 	wrapper: {
@@ -18,6 +18,7 @@ const styles = {
 class AddComment extends Component {
 	state = {
 		addComment: false,
+		commentField: null,
 	};
 	render() {
 		const { classes } = this.props;
@@ -33,8 +34,14 @@ class AddComment extends Component {
 				<br />
 				{this.state.addComment && (
 					<div>
-						<FormControl className={classes.form}>
+						<form
+							className={classes.form}
+							onSubmit={e => {
+								this.addComment(this.state.commentField, this.props.loggedInUser, this.props.id);
+							}}
+						>
 							<TextField
+								onChange={this.handleInput}
 								fullWidth="true"
 								label={this.props.loggedInUser}
 								multiline
@@ -43,23 +50,23 @@ class AddComment extends Component {
 								InputProps={{
 									endAdornment: (
 										<InputAdornment position="end">
-											<IconButton>post</IconButton>
+											<Button
+												type="sumbit"
+												onCLick={e => {
+													this.addComment(
+														this.state.commentField,
+														this.props.loggedInUser,
+														this.props.id
+													);
+												}}
+											>
+												post
+											</Button>
 										</InputAdornment>
 									),
 								}}
 							/>
-						</FormControl>
-						{/* <form
-							onSubmit={e => {
-								e.preventDefault();
-								this.addComment(this.state.commentField, this.props.loggedInUser, this.props.id);
-							}}
-						>
-							{' '}
-							{this.props.loggedInUser} :{'  '}
-							<input type="text" className="addCommentForm" onChange={this.handleInput} />
-							<button type="submit">Post!</button>
-						</form> */}
+						</form>
 					</div>
 				)}
 			</div>
@@ -70,7 +77,7 @@ class AddComment extends Component {
 		this.setState({ commentField: e.target.value });
 	};
 
-	addComment(body, username, id) {
+	addComment = (body, username, id) => {
 		if (body) {
 			axiosPostComment(body, username, id);
 			this.setState({ addComment: false, commentField: null }, () => {
@@ -85,7 +92,7 @@ class AddComment extends Component {
 		} else {
 			alert('Please enter a comment to post.');
 		}
-	}
+	};
 }
 
 export default withStyles(styles)(AddComment);

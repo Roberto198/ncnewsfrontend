@@ -3,7 +3,7 @@ import { axiosGetArticleComments, axiosRemove } from '../api/axios';
 import AddComment from './AddComment';
 import SortButtons from './SortButtons';
 import CommentCard from './CommentCard';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const style = {
@@ -58,20 +58,20 @@ class CommentsContainer extends React.Component {
 				)}
 				{this.state.comment_count ? <h3>Comments found: {this.state.comment_count}</h3> : null}
 				Page: {this.state.p} of {this.state.pages} :{'  '}
-				<button
+				<Button
 					onClick={() => {
 						this.pageNav(-1);
 					}}
 				>
 					Prev
-				</button>
-				<button
+				</Button>
+				<Button
 					onClick={() => {
 						this.pageNav(1);
 					}}
 				>
 					Next
-				</button>
+				</Button>
 				<SortButtons reSort={this.getNewComments} context="comments" query={{}} />
 				{this.state.comments &&
 					this.state.comments.map(

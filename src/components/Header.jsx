@@ -101,12 +101,7 @@ class Header extends React.Component {
 		return (
 			<div className={classes.root}>
 				<div className={classes.toolbar} />
-				<AppBar
-					style={{
-						zIndex: '1',
-					}}
-					position="fixed"
-				>
+				<AppBar position="fixed">
 					<Toolbar>
 						<IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
 							<div>
