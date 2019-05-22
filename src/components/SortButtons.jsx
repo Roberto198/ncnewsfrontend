@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, Grid } from '@material-ui/core';
+import { withStyles, Button } from '@material-ui/core';
 
 const styles = theme => ({
 	root: {
@@ -22,10 +22,10 @@ const styles = theme => ({
 });
 
 function SortButtons(props) {
-	const { classes } = props;
+	const { classes, reSort } = props;
 
 	return (
-		<div className={classes.root}>
+		<Fragment className={classes.root}>
 			<Button
 				size="small"
 				color="primary"
@@ -33,7 +33,7 @@ function SortButtons(props) {
 				aria-label="Add"
 				className={classes.fab}
 				onClick={() => {
-					props.reSort({ ...props.query, sort_by: 'created_at' });
+					reSort({ ...props.query, sort_by: 'created_at' });
 				}}
 			>
 				New!
@@ -45,7 +45,7 @@ function SortButtons(props) {
 				aria-label="Add"
 				className={classes.fab}
 				onClick={() => {
-					props.reSort({ ...props.query, sort_by: 'comment_count' });
+					reSort({ ...props.query, sort_by: 'comment_count' });
 				}}
 			>
 				Most Comments!
@@ -57,12 +57,12 @@ function SortButtons(props) {
 				aria-label="Add"
 				className={classes.fab}
 				onClick={() => {
-					props.reSort({ ...props.query, sort_by: 'votes' });
+					reSort({ ...props.query, sort_by: 'votes' });
 				}}
 			>
 				Most Likes!
 			</Button>
-		</div>
+		</Fragment>
 	);
 }
 

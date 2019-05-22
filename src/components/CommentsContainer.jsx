@@ -1,9 +1,9 @@
 import React from 'react';
-import { axiosGetArticleComments, axiosRemove } from '../api/axios';
 import AddComment from './AddComment';
 import SortButtons from './SortButtons';
 import CommentCard from './CommentCard';
-import { withStyles, Button } from '@material-ui/core';
+import { axiosGetArticleComments, axiosRemove } from '../api/axios';
+import { withStyles, Button, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const style = {
@@ -11,6 +11,10 @@ const style = {
 		width: '100%',
 		maxWidth: 1000,
 		textAlign: 'center',
+	},
+	pageInfo: {
+		display: 'inline-block',
+		margin: '1vh',
 	},
 };
 
@@ -24,11 +28,13 @@ class CommentsContainer extends React.Component {
 		pages: null,
 	};
 
-	fetch() {}
+	fetchComments = params => {
+		return axiosGetArticleComments(this.props.article, params);
+	};
 
 	componentDidUpdate(prevProps, prevState) {
 		if (prevState.p !== this.state.p) {
-			axiosGetArticleComments(this.props.article, { params: { p: this.state.p, limit: this.state.limit } }).then(
+			this.fetchComments({ params: { p: this.state.p, limit: this.state.limit } }).then(
 				({ data: { comments } }) => {
 					this.setState({ comments });
 				}
@@ -36,7 +42,7 @@ class CommentsContainer extends React.Component {
 		}
 	}
 	componentDidMount() {
-		axiosGetArticleComments(this.props.article, { params: { p: this.state.p, limit: this.state.limit } }).then(
+		this.fetchComments({ params: { p: this.state.p, limit: this.state.limit } }).then(
 			({ data: { comments, comment_count } }) => {
 				this.setState({ comments, comment_count, pages: Math.ceil(comment_count / this.state.limit) });
 			}
@@ -56,8 +62,14 @@ class CommentsContainer extends React.Component {
 						/>
 					</div>
 				)}
-				{this.state.comment_count ? <h3>Comments found: {this.state.comment_count}</h3> : null}
-				Page: {this.state.p} of {this.state.pages} :{'  '}
+				{this.state.comment_count ? (
+					<Typography variant="button" className={classes.pageInfo}>
+						Comments found: {this.state.comment_count}
+					</Typography>
+				) : null}
+				<Typography variant="button" className={classes.pageInfo}>
+					Page: {this.state.p} of {this.state.pages} :{'  '}
+				</Typography>
 				<Button
 					onClick={() => {
 						this.pageNav(-1);
@@ -74,51 +86,19 @@ class CommentsContainer extends React.Component {
 				</Button>
 				<SortButtons reSort={this.getNewComments} context="comments" query={{}} />
 				{this.state.comments &&
-					this.state.comments.map(
-						comment => (
-							<CommentCard
-								comment={comment}
-								loggedInUser={this.props.loggedInUser}
-								remove={this.remove}
-							/>
-						)
-						// 	{
-						// 	let date = comment.created_at;
-						// 	return (
-						// 		<div className="commentBody" key={comment.comment_id}>
-						// 			<p>{comment.body}</p>
-						// 			{this.props.loggedInUser && (
-						// 				<VoteButtons
-						// 					loggedInUser={this.props.loggedInUser}
-						// 					voteFunc={this.vote}
-						// 					remove={this.remove}
-						// 					voteValue={this.state.vote}
-						// 					author={comment.author}
-						// 					path={this.props.path}
-						// 					id={comment.comment_id}
-						// 					media="comments"
-						// 				/>
-						// 			)}
-						// 			<span className="commentDetail">
-						// 				{date} -- {comment.author} -- {comment.votes}
-						// 			</span>
-						// 		</div>
-						// 	);
-						//
-						// }
-					)}
+					this.state.comments.map(comment => (
+						<CommentCard comment={comment} loggedInUser={this.props.loggedInUser} remove={this.remove} />
+					))}
 			</div>
 		);
 	}
 
 	pushComment = newCommentObj => {
-		console.log(newCommentObj, 'newCommentObj');
 		this.setState(prevState => {
-			let newComments = [newCommentObj, ...prevState.comments];
-			console.log(newComments);
-			return { comments: newComments };
+			return { comments: [newCommentObj, ...prevState.comments] };
 		});
 	};
+
 	remove = (media, id) => {
 		axiosRemove(media, id);
 		this.setState({
@@ -127,21 +107,17 @@ class CommentsContainer extends React.Component {
 			}),
 		});
 	};
+
 	getNewComments = query => {
-		console.log(query);
-		let id = this.props.article;
-		axiosGetArticleComments(id, { params: query }).then(({ data: { comments } }) => {
+		this.fetchComments({ params: query }).then(({ data: { comments } }) => {
 			this.setState({ comments });
 		});
 	};
+
 	pageNav = int => {
 		let { p, pages } = this.state;
-		// console.log(int, '<-int');
-		// console.log(this.state, '<-state');
 		if (p + int <= pages && p + int > 0) {
-			this.setState({ p: p + int }, () => {
-				console.log(this.state);
-			});
+			this.setState({ p: p + int });
 		}
 	};
 }

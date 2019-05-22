@@ -1,17 +1,29 @@
 import React, { Component } from 'react';
 import VoteButtons from './VoteButtons';
 import { axiosIncVotes, axiosRemove } from '../api/axios';
+import { Typography, Paper, withStyles } from '@material-ui/core';
+import { Link } from '@reach/router';
 
+const styles = {
+	commentBody: {
+		padding: '3vh',
+	},
+	comment: {
+		padding: '3vh',
+		display: 'block',
+		backgroundColor: '#f5f5f5	',
+	},
+};
 class CommentCard extends Component {
 	state = {
 		vote: 0,
 	};
 	render() {
-		let { comment } = this.props;
+		let { comment, classes } = this.props;
 		let date = comment.created_at;
 		return (
-			<div className="commentBody" key={comment.comment_id}>
-				<p>{comment.body}</p>
+			<Paper className={classes.commentBody} key={comment.comment_id}>
+				<Typography className={classes.comment}>{comment.body}</Typography>
 				{this.props.loggedInUser && (
 					<VoteButtons
 						loggedInUser={this.props.loggedInUser}
@@ -25,9 +37,12 @@ class CommentCard extends Component {
 					/>
 				)}
 				<span className="commentDetail">
-					{date} -- {comment.author} -- {comment.votes}
+					<Typography>
+						{this.createDate(date)} -- <Link to={`/users/${comment.author}`}>{comment.author}</Link> --{' '}
+						{comment.votes} Votes!
+					</Typography>
 				</span>
-			</div>
+			</Paper>
 		);
 	}
 
@@ -45,6 +60,9 @@ class CommentCard extends Component {
 			}),
 		});
 	};
+	createDate(stamp) {
+		return new Date(stamp).toDateString();
+	}
 }
 
-export default CommentCard;
+export default withStyles(styles)(CommentCard);

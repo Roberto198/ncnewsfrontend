@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { axiosPostComment } from '../api/axios';
-import { Button, TextField, InputLabel, withStyles, InputAdornment, Icon } from '@material-ui/core';
+import { Button, TextField, withStyles, InputAdornment } from '@material-ui/core';
 
 const styles = {
 	wrapper: {
