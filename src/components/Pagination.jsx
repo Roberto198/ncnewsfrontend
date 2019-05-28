@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Typography, Grid, withStyles } from '@material-ui/core';
+import { Button, Typography, Grid } from '@material-ui/core';
 
 class Pagination extends Component {
 	state = {};

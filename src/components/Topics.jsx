@@ -1,6 +1,5 @@
 import React from 'react';
 import { getAllTopics } from '../api/axios';
-import { Link } from '@reach/router';
 import TopicCard from './TopicCard';
 
 class Topics extends React.Component {

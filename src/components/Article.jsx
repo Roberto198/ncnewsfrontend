@@ -7,7 +7,7 @@ import { Paper, Typography, withStyles } from '@material-ui/core';
 
 const styles = {
 	div: {
-		padding: '40px 20px',
+		padding: '10vh 5vh',
 		margin: '5vw',
 		maxWidth: '900px',
 	},
@@ -51,8 +51,6 @@ class Article extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props;
-
 		if (this.state.isLoading) {
 			return <h3> Loading...</h3>;
 		}
@@ -65,6 +63,8 @@ class Article extends React.Component {
 			);
 		} else {
 			const { title, body, votes, topic, author, comment_count, created_at } = this.state.article;
+			const { vote } = this.state;
+			const { classes, loggedInUser, id } = this.props;
 
 			return (
 				<div className={classes.wrapper}>
@@ -77,7 +77,7 @@ class Article extends React.Component {
 						</Paper>
 						<Paper className={classes.div}>
 							<div>
-								<Typography className={classes.body} variant="title" gutterBottom>
+								<Typography className={classes.body} variant="h6" gutterBottom>
 									{body}
 								</Typography>
 							</div>
@@ -88,7 +88,7 @@ class Article extends React.Component {
 								<br />
 								Topic: <Link to={`/topics/${topic}`}>{topic}</Link>
 								<br />
-								Votes: {votes + this.state.vote}
+								Votes: {votes + vote}
 								<br />
 								Comments: {comment_count}
 								<br />
@@ -97,13 +97,12 @@ class Article extends React.Component {
 							{this.props.loggedInUser && (
 								<div className={classes.votes}>
 									<VoteButtons
-										loggedInUser={this.props.loggedInUser}
+										loggedInUser={loggedInUser}
 										voteFunc={this.vote}
 										remove={this.remove}
-										voteValue={this.state.vote}
-										author={this.state.article.author}
-										path={this.props.path}
-										id={this.props.id}
+										voteValue={vote}
+										author={author}
+										id={id}
 										media="articles"
 									/>
 								</div>
@@ -111,7 +110,7 @@ class Article extends React.Component {
 						</Paper>
 					</div>{' '}
 					<Paper className={classes.detail}>
-						<CommentsContainer article={this.props.id} loggedInUser={this.props.loggedInUser} />
+						<CommentsContainer article={id} loggedInUser={loggedInUser} />
 					</Paper>
 				</div>
 			);
@@ -126,7 +125,7 @@ class Article extends React.Component {
 	};
 
 	remove = (media, id) => {
-		axiosRemove(media, id).then(res => console.log(res));
+		axiosRemove(media, id);
 	};
 }
 

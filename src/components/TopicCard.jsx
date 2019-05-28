@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from '@reach/router';
 import { Typography, withStyles, Paper } from '@material-ui/core';
 
@@ -7,6 +7,8 @@ const styles = {
 		display: 'block',
 		textAlign: 'center',
 		margin: '3vh',
+		paddingTop: '5vh',
+		paddingBottom: '5vh',
 	},
 	h4: {
 		marginTop: '5vh',

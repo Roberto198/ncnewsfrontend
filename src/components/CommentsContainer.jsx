@@ -87,7 +87,12 @@ class CommentsContainer extends React.Component {
 				<SortButtons reSort={this.getNewComments} context="comments" query={{}} />
 				{this.state.comments &&
 					this.state.comments.map(comment => (
-						<CommentCard comment={comment} loggedInUser={this.props.loggedInUser} remove={this.remove} />
+						<CommentCard
+							key={comment.comment_id}
+							comment={comment}
+							loggedInUser={this.props.loggedInUser}
+							remove={this.remove}
+						/>
 					))}
 			</div>
 		);

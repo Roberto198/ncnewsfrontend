@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import { navigate } from '@reach/router';
 
 let url = 'https://northcodersapinews.herokuapp.com/api';
 

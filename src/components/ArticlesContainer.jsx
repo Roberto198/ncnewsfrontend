@@ -1,29 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { axiosArticlesRequest, axiosGetAllArticles } from '../api/axios';
 import ArticlesList from './ArticlesList';
 import SortButtons from './SortButtons';
 import Pagination from './Pagination';
-import { AppBar, Typography, withStyles, Toolbar, Button, Fab, Grid } from '@material-ui/core';
-import PropTypes from 'prop-types';
-
-const styles = {
-	root: {
-		flexGrow: 1,
-	},
-	grow: {
-		flexGrow: 1,
-	},
-	menuButton: {
-		marginLeft: -12,
-		marginRight: 20,
-	},
-	pageCount: {
-		display: 'inline',
-	},
-	listDetails: {
-		alignItems: 'center',
-	},
-};
 
 class ArticlesContainer extends React.Component {
 	state = {
@@ -35,7 +14,7 @@ class ArticlesContainer extends React.Component {
 		loading: true,
 	};
 
-	fetch() {
+	fetchArticles() {
 		axiosArticlesRequest(
 			{ params: { ...this.props.query, p: this.state.p, limit: this.state.limit } },
 			this.props.searchTerm
@@ -51,14 +30,11 @@ class ArticlesContainer extends React.Component {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.loggedInUser !== this.props.loggedInUser) {
-			this.setState({ loggedInUser: this.props.loggedInUser, loading: true });
-		}
 		if (prevState.p !== this.state.p) {
-			this.fetch();
+			this.fetchArticles();
 		}
 		if (this.props.searchTerm !== this.state.searchTerm) {
-			this.fetch();
+			this.fetchArticles();
 		}
 	}
 
@@ -67,12 +43,10 @@ class ArticlesContainer extends React.Component {
 			{ params: { ...this.props.query, p: this.state.p, limit: this.state.limit } },
 			this.props.searchTerm
 		).then(({ data: { articles, article_count } }) => {
-			console.log(articles);
 			this.setState({
 				articles,
 				article_count,
 				searchTerm: this.props.searchTerm,
-				loggedInUser: this.props.loggedInUser,
 				pages: Math.ceil(article_count / this.state.limit),
 				loading: false,
 			});
@@ -80,11 +54,12 @@ class ArticlesContainer extends React.Component {
 	}
 
 	render() {
-		// const { classes } = this.props;
-		let { articles, loggedInUser, article_count, p, pages } = this.state;
+		let { articles, article_count, p, pages } = this.state;
 		return (
 			<div>
-				<SortButtons style={{ zIndex: '0' }} reSort={this.getSortedArticles} query={this.props.query} />
+				<div>
+					<SortButtons style={{ zIndex: '0' }} reSort={this.getSortedArticles} query={this.props.query} />
+				</div>
 
 				<div className="articlesListWrapper">
 					{article_count && (
@@ -127,8 +102,4 @@ class ArticlesContainer extends React.Component {
 	};
 }
 
-ArticlesContainer.propTypes = {
-	classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(ArticlesContainer);
+export default ArticlesContainer;

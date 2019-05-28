@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Button } from '@material-ui/core';
 
@@ -25,11 +25,10 @@ function SortButtons(props) {
 	const { classes, reSort } = props;
 
 	return (
-		<Fragment className={classes.root}>
+		<div className={classes.root}>
 			<Button
 				size="small"
-				color="primary"
-				variant="extended"
+				variant="text"
 				aria-label="Add"
 				className={classes.fab}
 				onClick={() => {
@@ -38,22 +37,10 @@ function SortButtons(props) {
 			>
 				New!
 			</Button>
+
 			<Button
 				size="small"
-				color="primary"
-				variant="extended"
-				aria-label="Add"
-				className={classes.fab}
-				onClick={() => {
-					reSort({ ...props.query, sort_by: 'comment_count' });
-				}}
-			>
-				Most Comments!
-			</Button>
-			<Button
-				size="small"
-				color="primary"
-				variant="extended"
+				variant="text"
 				aria-label="Add"
 				className={classes.fab}
 				onClick={() => {
@@ -62,7 +49,22 @@ function SortButtons(props) {
 			>
 				Most Likes!
 			</Button>
-		</Fragment>
+			<div>
+				{props.context !== 'comments' && (
+					<Button
+						size="small"
+						variant="text"
+						aria-label="Add"
+						className={classes.fab}
+						onClick={() => {
+							reSort({ ...props.query, sort_by: 'comment_count' });
+						}}
+					>
+						Most Comments!
+					</Button>
+				)}
+			</div>
+		</div>
 	);
 }
 

@@ -42,7 +42,7 @@ class AddComment extends Component {
 						>
 							<TextField
 								onChange={this.handleInput}
-								fullWidth="true"
+								fullWidth={true}
 								label={this.props.loggedInUser}
 								multiline
 								rows="4"
@@ -52,7 +52,7 @@ class AddComment extends Component {
 										<InputAdornment position="end">
 											<Button
 												type="sumbit"
-												onCLick={e => {
+												onClick={e => {
 													this.addComment(
 														this.state.commentField,
 														this.props.loggedInUser,

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AppBar, Toolbar, IconButton, InputBase, Button, Link, Menu, MenuItem } from '@material-ui/core';
+import { AppBar, Toolbar, InputBase, Button, Menu, MenuItem } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -97,76 +97,73 @@ class Header extends React.Component {
 	render() {
 		let { classes } = this.props;
 		let { anchorEl } = this.state;
-		let width = window.innerWidth;
 		return (
 			<div className={classes.root}>
 				<div className={classes.toolbar} />
 				<AppBar position="fixed">
 					<Toolbar>
-						<IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-							<div>
-								<Button
-									aria-owns={anchorEl ? 'simple-menu' : undefined}
-									aria-haspopup="true"
-									onClick={this.handleClick}
-								>
-									<MenuIcon />
-								</Button>
-								<Menu
-									id="simple-menu"
-									anchorEl={anchorEl}
-									open={Boolean(anchorEl)}
-									onClose={this.handleClose}
-								>
-									{this.props.loggedInUser ? (
-										<div>
-											<MenuItem onClick={this.logOut}>Logout</MenuItem>
-											<MenuItem onClick={this.profile}>
-												{this.props.loggedInUser}'s Profile
-											</MenuItem>
-										</div>
-									) : (
-										<div>
-											<MenuItem>
-												<form onSubmit={this.submitUsername}>
-													Username:{'  '}
-													<InputBase
-														type="text"
-														onChange={this.handleInput}
-														placeholder="E.g.: jessjelly"
-													/>
-												</form>
-											</MenuItem>
-											<MenuItem>
-												<form onSubmit={this.submitUsername}>
-													Password:{'  '}
-													<InputBase
-														type="text"
-														onChange={this.handleInput}
-														placeholder="No password."
-													/>
-												</form>
-											</MenuItem>
-										</div>
-									)}
-									{this.state.isDesktop === false ? (
-										<div>
-											{' '}
-											<MenuItem onClick={this.goHome}>Home</MenuItem>
-											<MenuItem onClick={this.goTopics}> Topics </MenuItem>
-										</div>
-									) : null}
-								</Menu>
-							</div>
-						</IconButton>
-						<Button href="/" size="large" className={classes.title} variant="text" color="inherit" noWrap>
+						<div>
+							<Button
+								aria-owns={anchorEl ? 'menu' : undefined}
+								aria-haspopup="true"
+								onClick={this.handleClick}
+							>
+								<MenuIcon />
+							</Button>
+							<Menu id="menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose}>
+								{this.props.loggedInUser ? (
+									<div>
+										<MenuItem onClick={this.logOut}>Logout</MenuItem>
+										<MenuItem onClick={this.profile}>{this.props.loggedInUser}'s Profile</MenuItem>
+									</div>
+								) : (
+									<div>
+										<MenuItem>
+											<form onSubmit={this.submitUsername}>
+												Username:{'  '}
+												<InputBase
+													type="text"
+													onChange={this.handleInput}
+													placeholder="E.g.: jessjelly"
+												/>
+											</form>
+										</MenuItem>
+										<MenuItem>
+											<form onSubmit={this.submitUsername}>
+												Password:{'  '}
+												<InputBase
+													type="text"
+													onChange={this.handleInput}
+													placeholder="No password."
+												/>
+											</form>
+										</MenuItem>
+									</div>
+								)}
+								{this.state.isDesktop === false ? (
+									<div>
+										{' '}
+										<MenuItem onClick={this.goHome}>Home</MenuItem>
+										<MenuItem onClick={this.goTopics}> Topics </MenuItem>
+									</div>
+								) : null}
+							</Menu>
+						</div>
+						<Button
+							href="/"
+							size="large"
+							className={classes.title}
+							variant="text"
+							color="inherit"
+							nowrap="true"
+						>
 							NC News
 						</Button>{' '}
 						<div className={classes.grow} />
-						<Button href="/topics" className={classes.title} color="inherit" noWrap>
+						<Button href="/topics" className={classes.title} color="inherit" nowrap="true">
 							Topics
 						</Button>
-						<Button href="/" className={classes.title} color="inherit" noWrap>
+						<Button href="/" className={classes.title} color="inherit" nowrap="true">
 							Home
 						</Button>
 						<div className={classes.search}>
@@ -253,79 +250,3 @@ Header.propTypes = {
 };
 
 export default withStyles(styles)(Header);
-
-// import React from 'react';
-// import { Link } from '@reach/router';
-
-// class Header extends React.Component {
-// 	state = {
-// 		search: '',
-// 		usernameInput: null,
-// 	};
-
-// 	render() {
-// 		return (
-// 			<div className="wrapper">
-// 				<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
-// 				<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-// 				<div className="mainHeader">
-// 					{this.props.loggedInUser === null ? (
-// 						<span className="loginControl">
-// 							<form onSubmit={this.submitUsername}>
-// 								Login : <input type="text" onChange={this.handleInput} defaultValue="E.g.: jessjelly" />
-// 								<button type="submit">Go!</button>
-// 							</form>
-// 						</span>
-// 					) : (
-// 						<span className="loginControl">
-// 							<Link to={`/users/${this.props.loggedInUser}`}>Profile.</Link>
-// 							<span onClick={this.logOut}>Logout.</span>
-// 						</span>
-// 					)}
-// 					<span className="ncnews">NCNews</span>{' '}
-// 					<span className="searchBox">
-// 						<form onSubmit={this.submitSearch}>
-// 							<input type="text" onChange={this.updateSearch} value={this.state.search} />
-// 							<button type="submit">Search!</button>
-// 							<Link to="/topics">
-// 								<button>topics</button>
-// 							</Link>
-// 							<Link to="/">
-// 								<button onClick={this.exitSearch}>Home</button>
-// 							</Link>
-// 						</form>
-// 					</span>
-// 				</div>
-// 			</div>
-// 		);
-// 	}
-
-// 	updateSearch = e => {
-// 		this.setState({ search: e.target.value });
-// 	};
-
-// 	submitSearch = e => {
-// 		e.preventDefault();
-// 		this.props.basicSearch(this.state.search);
-// 		this.setState({ search: '' });
-// 	};
-// 	exitSearch = () => {
-// 		this.props.basicSearch('');
-// 		this.setState({ search: '' });
-// 	};
-
-// 	handleInput = e => {
-// 		this.setState({ usernameInput: e.target.value });
-// 	};
-
-// 	submitUsername = e => {
-// 		e.preventDefault();
-// 		this.props.setUsername(this.state.usernameInput);
-// 	};
-
-// 	logOut = e => {
-// 		this.props.logOut();
-// 	};
-// }
-
-// export default Header;

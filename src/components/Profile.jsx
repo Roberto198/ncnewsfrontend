@@ -1,7 +1,27 @@
 import React from 'react';
 import ArticlesContainer from './ArticlesContainer';
 import { axiosGetUser } from '../api/axios';
-import CommentsContainter from './CommentsContainer';
+import { Typography, Paper, withStyles } from '@material-ui/core';
+
+const styles = {
+	profile: {
+		textAlign: 'center',
+		justifyContent: 'center',
+		padding: '3vh',
+		marginBottom: '3vh	',
+	},
+	profileContent: {
+		display: 'block',
+	},
+	username: {
+		display: 'block',
+		paddingBottom: '2vh',
+		borderBottom: '1px solid black',
+	},
+	articles: {
+		padding: '3vh',
+	},
+};
 
 class Profile extends React.Component {
 	state = {
@@ -9,20 +29,13 @@ class Profile extends React.Component {
 		loadedUser: false,
 		loadedArticle: false,
 		articles: [],
-		loggedInUser: null,
 		isLoading: true,
 	};
-
-	componentDidUpdate(prevProps, prevState) {
-		if (prevProps.loggedInUser !== this.props.loggedInUser) {
-			this.setState({ loggedInUser: this.props.loggedInUser });
-		}
-	}
 
 	componentDidMount() {
 		axiosGetUser(this.props.id)
 			.then(({ data }) => {
-				this.setState({ displayedUser: data[0], loggedInUser: this.props.loggedInUser, isLoading: false });
+				this.setState({ displayedUser: data[0], isLoading: false });
 			})
 			.catch(({ response: { data } }) => {
 				this.setState({ err: data, isLoading: false });
@@ -30,7 +43,7 @@ class Profile extends React.Component {
 	}
 
 	render() {
-		let { loggedInUser } = this.props;
+		let { loggedInUser, classes } = this.props;
 		if (this.state.isLoading) {
 			return <h3> Loading...</h3>;
 		}
@@ -42,22 +55,30 @@ class Profile extends React.Component {
 				</div>
 			);
 		} else
-			return this.state.displayedUser ? (
-				<div className=" profileWrapper">
-					<h1>{this.props.id}</h1>
-					<div className="profilePicture">
-						<img src={`${this.state.displayedUser.avatar_url}`} alt="profile" />
+			return (
+				this.state.displayedUser && (
+					<div className="profileWrapper">
+						<Paper className={classes.profile}>
+							<Typography className={classes.username} variant="h3">
+								{this.props.id}
+							</Typography>
+							<div className={classes.profileContent}>
+								<img src={`${this.state.displayedUser.avatar_url}`} alt="profile" />
+							</div>
+						</Paper>
+						<Paper className={classes.articles}>
+							<Typography variant="h5">{this.state.displayedUser.username}'s articles:</Typography>
+							<div className="profilesArticlesContainer" />
+							<ArticlesContainer
+								query={{ author: this.state.displayedUser.username }}
+								searchTerm=""
+								loggedInUser={loggedInUser}
+							/>
+						</Paper>
 					</div>
-					<h3>{this.state.displayedUser.username}'s articles:</h3>
-					<div className="profilesArticlesContainer" />
-					<ArticlesContainer
-						query={{ author: this.state.displayedUser.username }}
-						searchTerm=""
-						loggedInUser={loggedInUser}
-					/>
-				</div>
-			) : null;
+				)
+			);
 	}
 }
 
-export default Profile;
+export default withStyles(styles)(Profile);

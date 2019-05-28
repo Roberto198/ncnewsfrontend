@@ -1,11 +1,9 @@
-import React, { Fragment } from 'react';
-import { withStyles, Fab, Link as LinkUI, Grid } from '@material-ui/core';
+import React from 'react';
+import { withStyles, Fab, Link } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Link } from '@reach/router';
 
 const styles = {
 	card: {
@@ -26,6 +24,13 @@ const styles = {
 	pos: {
 		marginBottom: 12,
 	},
+	actions: {
+		position: 'relative',
+	},
+	deleteArticle: {
+		position: 'absolute',
+		bottom: 0,
+	},
 };
 
 class ArticleCard extends React.Component {
@@ -39,33 +44,25 @@ class ArticleCard extends React.Component {
 			<Card className={classes.card}>
 				<CardContent className={classes.content}>
 					<Typography variant="h5" component="h2">
-						<Link to={`/article/${article.article_id}`}>
-							<LinkUI>{article.title}</LinkUI>
-						</Link>
+						<Link href={`/article/${article.article_id}`}>{article.title}</Link>
 					</Typography>
 					<Typography className="body" color="textSecondary">
-						Author:{' '}
-						<Link to={`/users/${article.author}`}>
-							<LinkUI>{article.author}</LinkUI>
-						</Link>
+						Author: <Link href={`/users/${article.author}`}>{article.author}</Link>
 					</Typography>
 					<Typography className="body" color="textSecondary">
 						Posted: {this.createDate(article.created_at)}
 					</Typography>
 					<Typography className="body" color="textSecondary">
-						Topic:{' '}
-						<Link to={`/topics/${article.topic}`}>
-							<LinkUI>{article.topic}</LinkUI>
-						</Link>
+						Topic: <Link href={`/topics/${article.topic}`}>{article.topic}</Link>
 					</Typography>
 					<Typography className="body" color="textSecondary">
 						Votes: {article.votes}
 					</Typography>
 				</CardContent>
-				<CardActions>
+				<CardActions className="actions">
 					{this.props.loggedInUser === this.props.article.author ? (
-						<Fragment>
-							<Typography variant="body" className="delete">
+						<div className="deleteArticle">
+							<Typography variant="body1" className="delete">
 								Delete your article?{'  '}
 							</Typography>
 							<Fab size="small" onClick={this.remove}>
@@ -73,7 +70,7 @@ class ArticleCard extends React.Component {
 									❌
 								</span>
 							</Fab>
-						</Fragment>
+						</div>
 					) : null}
 				</CardActions>
 			</Card>
@@ -86,61 +83,3 @@ class ArticleCard extends React.Component {
 }
 
 export default withStyles(styles)(ArticleCard);
-
-// 	<Card className="card">
-// 		<CardContent>
-// 			<Typography variant="h5" component="h2">
-// 				<Link to={`/article/${article.article_id}`}>
-// 					<LinkUI>{article.title}</LinkUI>
-// 				</Link>
-// 			</Typography>
-// 			<Typography className="body" color="textSecondary">
-// 				Author:{' '}
-// 				<Link to={`/users/${article.author}`}>
-// 					<LinkUI>{article.author}</LinkUI>
-// 				</Link>
-// 			</Typography>
-// 			<Typography className="body" color="textSecondary">
-// 				Posted: {this.createDate(article.created_at)}
-// 			</Typography>
-// 			<Typography className="body" color="textSecondary">
-// 				Topic:{' '}
-// 				<Link to={`/topics/${article.topic}`}>
-// 					<LinkUI>{article.topic}</LinkUI>
-// 				</Link>
-// 			</Typography>
-// 			<Typography className="body" color="textSecondary">
-// 				Votes: {article.votes}
-// 			</Typography>
-// 		</CardContent>
-
-// 	</Card>
-
-// <div className="listedArticle" key={article.article_id}>
-// 	<Link to={`/article/${article.article_id}`}>
-// 		<span className="listedArticleTitle"></span>
-// 	</Link>
-// 	<hr />
-// 	<div className="articleCardDetail">
-// 		<div className="votes">
-// 			Votes: {article.votes + this.state.vote} {'  '}
-// 			{this.props.loggedInUser === this.props.article.author ? (
-// 				<button onClick={this.remove}>
-// 					<span role="img" aria-label="Remove!">
-// 						❌
-// 					</span>
-// 				</button>
-// 			) : null}
-// 		</div>
-
-// 		<div className="links">
-// 			<div className="author">
-// 				Author: <Link to={`/users/${article.author}`}>{article.author}</Link>
-// 			</div>
-// 			<div className="date">Published : {this.createDate(article.created_at)}</div>
-// 			<div className="topic">
-// 				Topic: <Link to={`/topics/${article.topic}`}>{article.topic}</Link>
-// 			</div>
-// 		</div>
-// 	</div>
-// </div>

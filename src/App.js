@@ -10,12 +10,12 @@ import { Router, navigate } from '@reach/router';
 import { axiosGetUser } from './api/axios';
 import { withStyles } from '@material-ui/core';
 
-const styles = {
+const styles = theme => ({
 	route: {
 		margin: 'auto',
 		maxWidth: '900px',
 	},
-};
+});
 
 class App extends React.Component {
 	state = {
@@ -34,17 +34,13 @@ class App extends React.Component {
 
 		return (
 			<div className={classes.app}>
-				<div className="sticky">
-					<Router>
-						<Header
-							path="/*"
-							loggedInUser={loggedInUser}
-							logOut={this.logOut}
-							basicSearch={this.basicSearch}
-							setUsername={this.setUsername}
-						/>
-					</Router>
-				</div>
+				<Header
+					loggedInUser={loggedInUser}
+					logOut={this.logOut}
+					basicSearch={this.basicSearch}
+					setUsername={this.setUsername}
+				/>
+
 				<Router className={classes.route}>
 					<Profile path="/users/:id" loggedInUser={loggedInUser} />
 					<Topics path="/topics" loggedInUser={loggedInUser} />
