@@ -36,7 +36,3 @@ export const axiosRemove = (media, id) => {
 export const axiosPostComment = (body, username, id) => {
   return Axios.post(`${url}/articles/${id}/comments`, { username, body });
 };
-
-// const axiosSearchArticles =
-
-// default.exports = { axiosArticlesRequest, axiosGetAllArticles };
