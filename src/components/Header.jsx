@@ -142,16 +142,6 @@ class Header extends React.Component {
                         />
                       </form>
                     </MenuItem>
-                    <MenuItem>
-                      <form onSubmit={this.submitUsername}>
-                        Password:{"  "}
-                        <InputBase
-                          type='text'
-                          onChange={this.handleInput}
-                          placeholder='No password.'
-                        />
-                      </form>
-                    </MenuItem>
                   </div>
                 )}
                 {this.state.isDesktop === false ? (
