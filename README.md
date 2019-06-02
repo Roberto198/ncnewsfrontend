@@ -1,6 +1,6 @@
 # NCNews
 
-This is a React web aplication designed to serve new articles and ther associated comments. Designed primarily for mobile it is also responsive and will work on desktop. It is hosted on netlify and it works with the API that i have built and hosted with heroku.
+This is a React web application designed to serve news articles and ther associated comments. Designed primarily for mobile it is also responsive and will work on desktop. It is hosted on netlify and it works with the API that i have built and hosted with heroku.
 
 - Hosted Site: [https://robs-news-app.netlify.com/](https://robs-news-app.netlify.com/)
 
@@ -10,7 +10,7 @@ This is a React web aplication designed to serve new articles and ther associate
 
 ## Getting Started
 
-To adapt develop or test this project for this repository on github and clone to your loval machine.
+To adapt develop or test this project fork this repository on github and clone to your loval machine.
 
 ### Prerequisites
 

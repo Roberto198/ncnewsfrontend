@@ -16,11 +16,16 @@ const styles = {
     initialLetter: "2",
     maxWidth: "900px"
   },
-
+  votediv: {
+    padding: "5vh 5vh",
+    margin: "5vw",
+    maxWidth: "900px"
+  },
   votes: {
     textAlign: "center",
     paddingTop: "10px",
     margin: "5vw",
+    marginBottom: "0px",
     maxWidth: "900px"
   },
   detail: {
@@ -90,7 +95,7 @@ class Article extends React.Component {
                 </Typography>
               </div>
             </Paper>
-            <Paper className={classes.div}>
+            <Paper className={classes.votediv}>
               <Typography>
                 By: <Link to={`/users/${author}`}>{author}</Link>
                 <br />
