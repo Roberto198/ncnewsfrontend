@@ -139,7 +139,7 @@ class Article extends React.Component {
 
   remove = (media, id) => {
     axiosRemove(media, id).then(() => {
-      navigate(`/articles/${id}`);
+      navigate(`/users/${this.state.article.author}`);
     });
   };
 }

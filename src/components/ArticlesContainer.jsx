@@ -46,24 +46,7 @@ class ArticlesContainer extends React.Component {
   }
 
   componentDidMount() {
-    axiosArticlesRequest(
-      {
-        params: {
-          ...this.props.query,
-          p: this.state.p,
-          limit: this.state.limit
-        }
-      },
-      this.props.searchTerm
-    ).then(({ data: { articles, article_count } }) => {
-      this.setState({
-        articles,
-        article_count,
-        searchTerm: this.props.searchTerm,
-        pages: Math.ceil(article_count / this.state.limit),
-        loading: false
-      });
-    });
+    this.fetchArticles();
   }
 
   render() {
