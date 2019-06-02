@@ -18,6 +18,7 @@ const ArticlesList = props => {
         {articles.map(article => {
           return (
             <ArticleCard
+              remove={props.remove}
               article={article}
               loggedInUser={loggedInUser}
               key={article.article_id}

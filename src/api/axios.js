@@ -30,6 +30,7 @@ export const axiosIncVotes = (value, mediaType, mediaID) => {
 };
 
 export const axiosRemove = (media, id) => {
+  console.log(media, id);
   return Axios.delete(`${url}/${media}/${id}`);
 };
 

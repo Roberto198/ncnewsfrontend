@@ -1,7 +1,7 @@
 import React from "react";
 import CommentsContainer from "./CommentsContainer";
 import { axiosGetAllArticles, axiosRemove, axiosIncVotes } from "../api/axios";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
 import VoteButtons from "./VoteButtons";
 import { Paper, Typography, withStyles } from "@material-ui/core";
 
@@ -138,7 +138,9 @@ class Article extends React.Component {
   };
 
   remove = (media, id) => {
-    axiosRemove(media, id);
+    axiosRemove(media, id).then(() => {
+      navigate(`/articles/${id}`);
+    });
   };
 }
 

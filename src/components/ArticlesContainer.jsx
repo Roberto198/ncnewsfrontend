@@ -3,6 +3,7 @@ import { axiosArticlesRequest, axiosGetAllArticles } from "../api/axios";
 import ArticlesList from "./ArticlesList";
 import SortButtons from "./SortButtons";
 import Pagination from "./Pagination";
+import { axiosRemove } from "../api/axios";
 
 class ArticlesContainer extends React.Component {
   state = {
@@ -94,6 +95,7 @@ class ArticlesContainer extends React.Component {
 
             {articles && (
               <ArticlesList
+                remove={this.remove}
                 articles={articles}
                 loggedInUser={this.props.loggedInUser}
               />
@@ -103,6 +105,17 @@ class ArticlesContainer extends React.Component {
       </div>
     );
   }
+  remove = id => {
+    axiosRemove("articles", id).then(() => {
+      this.setState(prevState => {
+        return {
+          articles: prevState.articles.filter(article => {
+            return article.article_id !== id;
+          })
+        };
+      });
+    });
+  };
 
   getSortedArticles = param => {
     if (!this.state.searchTerm) {
