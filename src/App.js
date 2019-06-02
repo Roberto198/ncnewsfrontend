@@ -65,11 +65,15 @@ class App extends React.Component {
   };
 
   setUsername = username => {
-    axiosGetUser(username).then(({ data: user }) =>
-      this.setState({ loggedInUser: user[0].username }, () => {
-        localStorage.setItem("user", user[0].username);
-      })
-    );
+    axiosGetUser(username)
+      .then(({ data: user }) =>
+        this.setState({ loggedInUser: user[0].username }, () => {
+          localStorage.setItem("user", user[0].username);
+        })
+      )
+      .catch(err => {
+        alert("Please enter a valid username.");
+      });
   };
 
   logOut = () => {

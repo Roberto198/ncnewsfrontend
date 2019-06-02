@@ -19,19 +19,19 @@ class CommentCard extends Component {
     vote: 0
   };
   render() {
-    const { comment, classes } = this.props;
+    const { comment, classes, remove, path, loggedInUser } = this.props;
     const date = comment.created_at;
     return (
       <Paper className={classes.commentBody} key={comment.comment_id}>
         <Typography className={classes.comment}>{comment.body}</Typography>
         {this.props.loggedInUser && (
           <VoteButtons
-            loggedInUser={this.props.loggedInUser}
+            loggedInUser={loggedInUser}
             voteFunc={this.vote}
-            remove={this.props.remove}
+            remove={remove}
             voteValue={this.state.vote}
             author={comment.author}
-            path={this.props.path}
+            path={path}
             id={comment.comment_id}
             media='comments'
           />

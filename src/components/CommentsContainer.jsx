@@ -53,16 +53,16 @@ class CommentsContainer extends React.Component {
     });
   }
   render() {
-    const { classes } = this.props;
+    const { classes, loggedInUser, article } = this.props;
 
     return (
       <div className={classes.root}>
-        {this.props.article && this.props.loggedInUser && (
+        {article && loggedInUser && (
           <div className={classes.addComment}>
             <AddComment
-              id={this.props.article}
+              id={article}
               pushComment={this.pushComment}
-              loggedInUser={this.props.loggedInUser}
+              loggedInUser={loggedInUser}
             />
           </div>
         )}
@@ -98,7 +98,7 @@ class CommentsContainer extends React.Component {
             <CommentCard
               key={comment.comment_id}
               comment={comment}
-              loggedInUser={this.props.loggedInUser}
+              loggedInUser={loggedInUser}
               remove={this.remove}
             />
           ))}
