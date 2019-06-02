@@ -40,7 +40,7 @@ class CommentCard extends Component {
           <Typography>
             {this.createDate(date)} --{" "}
             <Link to={`/users/${comment.author}`}>{comment.author}</Link> --{" "}
-            {comment.votes} Votes!
+            {comment.votes + this.state.vote} Votes!
           </Typography>
         </span>
       </Paper>

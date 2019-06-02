@@ -28,7 +28,6 @@ class Profile extends React.Component {
     displayedUser: null,
     loadedUser: false,
     loadedArticle: false,
-    articles: [],
     isLoading: true
   };
 

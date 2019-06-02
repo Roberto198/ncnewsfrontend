@@ -37,10 +37,10 @@ class ArticlesContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.p !== this.state.p) {
-      this.fetchArticles();
-    }
-    if (this.props.searchTerm !== this.state.searchTerm) {
+    if (
+      prevState.p !== this.state.p ||
+      this.props.searchTerm !== this.state.searchTerm
+    ) {
       this.fetchArticles();
     }
   }
