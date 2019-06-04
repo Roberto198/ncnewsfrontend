@@ -17,22 +17,16 @@ const styles = {
     maxWidth: "900px"
   },
   votediv: {
-    padding: "5vh 5vh",
-    margin: "5vw",
     maxWidth: "900px"
   },
   votes: {
     textAlign: "center",
-    paddingTop: "10px",
-    margin: "5vw",
     marginBottom: "0px",
     maxWidth: "900px"
   },
   detail: {
     display: "flex",
     justifyContent: "center",
-    margin: "5vw",
-    padding: "10px",
     maxWidth: "900px"
   }
 };

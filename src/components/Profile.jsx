@@ -26,8 +26,6 @@ const styles = {
 class Profile extends React.Component {
   state = {
     displayedUser: null,
-    loadedUser: false,
-    loadedArticle: false,
     isLoading: true
   };
 

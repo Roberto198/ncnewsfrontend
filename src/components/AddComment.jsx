@@ -36,9 +36,7 @@ class AddComment extends Component {
 					<div>
 						<form
 							className={classes.form}
-							onSubmit={e => {
-								this.addComment(this.state.commentField, this.props.loggedInUser, this.props.id);
-							}}
+							onSubmit={this.onSubmit}}
 						>
 							<TextField
 								onChange={this.handleInput}
@@ -71,6 +69,12 @@ class AddComment extends Component {
 				)}
 			</div>
 		);
+	}
+
+	onSubmit = e => {
+		e.preventDefautl()
+		this.addComment(this.state.commentField, this.props.loggedInUser, this.props.id);
+		
 	}
 
 	handleInput = e => {
